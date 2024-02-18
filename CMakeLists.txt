@@ -28,6 +28,18 @@ set(ELEMENTS_APP_VERSION "1.0")
 
 set(ELEMENTS_APP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Main.cpp)
 
+set(ELEMENTS_APP_RESOURCES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/View.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/View.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/MainView.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/MainView.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Controller.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/Controller.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Modal.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/Modal.cpp" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/LoginView.h" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/LoginView.cpp")
+
 # For your custom application icon on macOS or Windows see cmake/AppIcon.cmake module
 include(AppIcon)
 include(ElementsConfigApp)
