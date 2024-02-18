@@ -8,7 +8,7 @@ Controller::Controller(std::unique_ptr<cycfi::elements::app> app)
 			m_App->stop();
 		};
 
-	m_CurrentView = std::make_unique<LoginView>(m_Window);
+	m_CurrentView = std::make_unique<MainView>(m_Window);
 }
 
 void Controller::Init()
