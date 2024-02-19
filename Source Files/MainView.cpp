@@ -22,6 +22,8 @@ void MainView::InitView()
         ), cycfi::elements::panel{}
     );
 
+    menu_button.on_click
+
     menu_button.menu(menu);
 
     content(
