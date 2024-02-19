@@ -59,11 +59,3 @@ void LoginView::SetLoginCallback(std::function<void(bool)>&& callback)
 {
     m_LoginButton.on_click = std::move(callback);
 }
-
-std::string_view LoginView::GetEmail() const
-{
-}
-
-std::string_view LoginView::GetPassword() const
-{
-}
