@@ -8,7 +8,7 @@ MainView::MainView(std::shared_ptr<cycfi::elements::window> window)
 
 void MainView::InitView()
 {
-    auto box = cycfi::elements::margin({ 10, 10, 10, 10 }, m_RoundedBox);
+    auto box = cycfi::elements::margin({ 10, 10, 10, 10 }, cycfi::elements::rbox_element{ cycfi::elements::rbox(m_BackgroundColor.level(1.5f)) });
 
     auto menu_button = cycfi::elements::button_menu("Menu", cycfi::elements::menu_position::bottom_left);
 
@@ -43,10 +43,10 @@ void MainView::InitView()
                                     cycfi::elements::margin({ 15, 15, 15, 15 },
                                         cycfi::elements::vtile(
                                             cycfi::elements::align_center_middle(
-                                                cycfi::elements::label("12:00").font_size(60.0f)
+                                                m_TimeLabel.font_size(60.0f)
                                             ),
                                             cycfi::elements::align_center_middle(
-                                                cycfi::elements::label("Monday, 21st January 2022").font_size(20.0f)
+                                                m_DateLabel.font_size(20.0f)
                                             )
                                         )
                                     ),
@@ -63,36 +63,36 @@ void MainView::InitView()
                                         cycfi::elements::vtile(
                                             cycfi::elements::align_center_middle(
                                                 cycfi::elements::margin({ 20, 20, 20, 20},
-												    cycfi::elements::image("sun.png", 0.4f)
+												    m_WeatherImage
                                                 )
 											),
                                             cycfi::elements::align_center_middle(
                                                 cycfi::elements::htile(
                                                     cycfi::elements::margin({10, 10, 10, 10},
                                                         cycfi::elements::vtile(
-                                                            cycfi::elements::label("15:00").font_size(20.0f).text_align(cycfi::elements::canvas::center),
+                                                            m_WeatherTimeLabels[0].first.font_size(20.0f).text_align(cycfi::elements::canvas::center),
                                                             cycfi::elements::vspace(5.0f),
                                                             cycfi::elements::align_center(
-                                                                cycfi::elements::image("sun.png", 0.05f)
+                                                                m_WeatherTimeLabels[0].second
                                                             )
                                                         )
                                                     ),
                                                     cycfi::elements::margin({ 10, 10, 10, 10 },
                                                         cycfi::elements::vtile(
-                                                            cycfi::elements::label("16:00").font_size(20.0f).text_align(cycfi::elements::canvas::center),
+                                                            m_WeatherTimeLabels[1].first.font_size(20.0f).text_align(cycfi::elements::canvas::center),
                                                             cycfi::elements::vspace(5.0f),
                                                             cycfi::elements::align_center(
-                                                                cycfi::elements::image("sun.png", 0.05f)
+                                                                m_WeatherTimeLabels[1].second
                                                             )
                                                         )
                                                     ),
                                                     cycfi::elements::layer(
                                                         cycfi::elements::margin({ 10, 10, 10, 10 },
                                                             cycfi::elements::vtile(
-                                                                cycfi::elements::label("17:00").font_size(20.0f).text_align(cycfi::elements::canvas::center),
+                                                                m_WeatherTimeLabels[2].first.font_size(20.0f).text_align(cycfi::elements::canvas::center),
                                                                 cycfi::elements::vspace(5.0f),
                                                                 cycfi::elements::align_center(
-                                                                    cycfi::elements::image("sun.png", 0.05f)
+                                                                    m_WeatherTimeLabels[2].second
                                                                 )
                                                             )
                                                         ),
@@ -100,19 +100,19 @@ void MainView::InitView()
                                                     ),
                                                     cycfi::elements::margin({ 10, 10, 10, 10 },
                                                         cycfi::elements::vtile(
-                                                            cycfi::elements::label("18:00").font_size(20.0f).text_align(cycfi::elements::canvas::center),
+                                                            m_WeatherTimeLabels[3].first.font_size(20.0f).text_align(cycfi::elements::canvas::center),
                                                             cycfi::elements::vspace(5.0f),
                                                             cycfi::elements::align_center(
-                                                                cycfi::elements::image("sun.png", 0.05f)
+                                                                m_WeatherTimeLabels[3].second
                                                             )
                                                         )
                                                     ),
                                                     cycfi::elements::margin({ 10, 10, 10, 10 },
                                                         cycfi::elements::vtile(
-                                                            cycfi::elements::label("19:00").font_size(20.0f).text_align(cycfi::elements::canvas::center),
+                                                            m_WeatherTimeLabels[4].first.font_size(20.0f).text_align(cycfi::elements::canvas::center),
                                                             cycfi::elements::vspace(5.0f),
                                                             cycfi::elements::align_center(
-                                                                cycfi::elements::image("sun.png", 0.05f)
+                                                                m_WeatherTimeLabels[4].second
                                                             )
                                                         )
                                                     )
@@ -127,17 +127,17 @@ void MainView::InitView()
                     )
                 ),
                 cycfi::elements::vtile(
-                    cycfi::elements::vstretch(1.5f,
+                    cycfi::elements::vstretch(1.0f,
                         cycfi::elements::margin({ 10, 10, 10, 10 },
-                            cycfi::elements::pane("Temperature",
+                            cycfi::elements::pane("Humidity",
                                 cycfi::elements::layer(
 								    cycfi::elements::margin({ 15, 15, 15, 15 },
                                         cycfi::elements::vtile(
                                             cycfi::elements::align_center(
-                                            cycfi::elements::label("27").font_size(60.0f)
+                                                m_HumidityLabel.font_size(60.0f)
                                             ),
                                             cycfi::elements::align_center_middle(
-                                            cycfi::elements::label("Feels like: 25").font_size(20.0f)
+                                                m_HumidityYesterdayLabel.font_size(20.0f)
                                             )
 									    )								
                                     ),
@@ -148,16 +148,81 @@ void MainView::InitView()
                     ),
                     cycfi::elements::vstretch(1.0f,
                         cycfi::elements::margin({ 10, 10, 10, 10 },
-                            cycfi::elements::pane("Humidity",
+                            cycfi::elements::pane("Wind",
+                                cycfi::elements::layer(
+                                    cycfi::elements::margin({ 15, 15, 15, 15 },
+                                        cycfi::elements::vtile(
+                                            cycfi::elements::align_center(
+                                                cycfi::elements::htile(
+                                                    m_WindLabel.font_size(60.0f),
+                                                    cycfi::elements::hspace(5.0f),
+                                                    cycfi::elements::label("MPH").font_size(20.0f)
+                                                )
+                                            ),
+                                            cycfi::elements::align_center_middle(
+                                                cycfi::elements::htile(
+                                                    cycfi::elements::margin({ 10, 10, 10, 10 },
+                                                        m_WindDirectionLabel.font_size(20.0f)
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    ),
+                                    box
+                                ), 1.3f, true
+                            )
+                        )
+                    ),
+                    cycfi::elements::vstretch(1.5f,
+                        cycfi::elements::margin({ 10, 10, 10, 10 },
+                            cycfi::elements::pane("Temprature",
                                 cycfi::elements::layer(
 								    cycfi::elements::margin({ 15, 15, 15, 15 },
                                         cycfi::elements::vtile(
-                                            cycfi::elements::align_center(
-											    cycfi::elements::label("25°C").font_size(60.0f)
-										    ),
                                             cycfi::elements::align_center_middle(
-											    cycfi::elements::label("Feels like 25°C").font_size(20.0f)
-										    )
+                                                cycfi::elements::htile(
+                                                    m_TemperatureLabel.font_size(70.0f),
+                                                    cycfi::elements::hspace(5.0f),
+                                                    cycfi::elements::label("\u00B0C").font_size(70.0f)
+                                                )
+                                            ),
+                                            cycfi::elements::align_center_middle(
+                                                cycfi::elements::htile(
+                                                    cycfi::elements::margin({10, 10, 10, 10},
+                                                        cycfi::elements::vtile(
+                                                            cycfi::elements::label("Dew Point").font_size(15.0f).text_align(cycfi::elements::canvas::center),
+                                                            cycfi::elements::vspace(5.0f),
+                                                            cycfi::elements::htile(
+                                                                m_TemperatureDewPointLabel.font_size(20.0f),
+                                                                cycfi::elements::hspace(5.0f),
+                                                                cycfi::elements::label("\u00B0C").font_size(20.0f)
+                                                            )
+                                                        )
+                                                    ),
+                                                    cycfi::elements::margin({ 10, 10, 10, 10 },
+                                                        cycfi::elements::vtile(
+                                                            cycfi::elements::label("Yesterday").font_size(15.0f).text_align(cycfi::elements::canvas::center),
+                                                            cycfi::elements::vspace(5.0f),
+                                                            cycfi::elements::htile(
+                                                                m_TemperatureYesterdayLabel.font_size(20.0f),
+                                                                cycfi::elements::hspace(5.0f),
+                                                                cycfi::elements::label("\u00B0C").font_size(20.0f)
+                                                            )
+                                                        )
+                                                    ),
+                                                    cycfi::elements::margin({ 10, 10, 10, 10 },
+                                                        cycfi::elements::vtile(
+                                                            cycfi::elements::label("Feels like").font_size(15.0f).text_align(cycfi::elements::canvas::center),
+                                                            cycfi::elements::vspace(5.0f),
+                                                            cycfi::elements::htile(
+                                                                m_TemperatureFeelsLikeLabel.font_size(20.0f),
+                                                                cycfi::elements::hspace(5.0f),
+                                                                cycfi::elements::label("\u00B0C").font_size(20.0f)
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
 									    )								
                                     ),
 								    box
@@ -174,5 +239,40 @@ void MainView::InitView()
 
 void MainView::UpdateView()
 {
+    this->InitView();
+}
 
+void MainView::UpdateTimeAndDate(const std::string& time_hh24_mm, const std::string_view& date_day_dd_mon_yyyy)
+{
+	m_TimeLabel.set_text(time_hh24_mm);
+	m_DateLabel.set_text(date_day_dd_mon_yyyy);
+}
+
+void MainView::UpdateWeather(const std::array<std::pair<std::string_view, std::string_view>, 5>& weather_and_times)
+{
+    for (uint64_t i = 0; i < weather_and_times.size(); ++i)
+    {
+        m_WeatherTimeLabels[i].first.set_text(weather_and_times[i].first);
+		m_WeatherTimeLabels[i].second.set_image(weather_and_times[i].second);
+    }
+}
+
+void MainView::UpdateHumidity(const uint32_t& humidity, const uint32_t& humidity_yesterday)
+{
+    m_HumidityLabel.set_text(std::to_string(humidity) + "%");
+	m_HumidityYesterdayLabel.set_text("Up " + std::to_string(humidity - humidity_yesterday) + "% from yesterday");
+}
+
+void MainView::UpdateWind(const uint32_t& wind_speed, const std::string_view& wind_direction)
+{
+	m_WindLabel.set_text(std::to_string(wind_speed));
+	m_WindDirectionLabel.set_text(wind_direction);
+}
+
+void MainView::UpdateTemperature(const uint32_t& temperature, const uint32_t& dew_point, const uint32_t& feels_like, const uint32_t& temperature_yesterday)
+{
+	m_TemperatureLabel.set_text(std::to_string(temperature));
+	m_TemperatureDewPointLabel.set_text(std::to_string(dew_point));
+	m_TemperatureFeelsLikeLabel.set_text(std::to_string(feels_like));
+	m_TemperatureYesterdayLabel.set_text(std::to_string(temperature_yesterday));
 }
