@@ -21,7 +21,7 @@ void LoginView::InitView()
                                             cycfi::elements::label("Email").text_align(cycfi::elements::canvas::left),
                                             cycfi::elements::hmin_size(200,
                                                 cycfi::elements::margin({ 0, 10, 0, 10 },
-                                                    cycfi::elements::input_box("", 1.2f).first
+                                                    m_EmailEntry.first
                                                 )
                                             )
                                         ),
@@ -29,13 +29,13 @@ void LoginView::InitView()
                                             cycfi::elements::label("Password").text_align(cycfi::elements::canvas::left),
                                             cycfi::elements::hmin_size(200,
                                                 cycfi::elements::margin({ 0, 10, 0, 10 },
-                                                    cycfi::elements::input_box("", 1.2f).first
+                                                    m_PasswordEntry.first
                                                 )
                                             )
                                         ),
                                         cycfi::elements::vtile(
                                             cycfi::elements::margin({ 20, 10, 20, 10 },
-                                                cycfi::elements::button("Login", 1.1f)
+                                                m_LoginButton
                                             )
                                         )
                                     )
@@ -52,5 +52,18 @@ void LoginView::InitView()
 
 void LoginView::UpdateView()
 {
+    this->InitView();
+}
 
+void LoginView::SetLoginCallback(std::function<void(bool)>&& callback)
+{
+    m_LoginButton.on_click = std::move(callback);
+}
+
+std::string_view LoginView::GetEmail() const
+{
+}
+
+std::string_view LoginView::GetPassword() const
+{
 }

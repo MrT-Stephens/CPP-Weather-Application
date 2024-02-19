@@ -22,8 +22,6 @@ void MainView::InitView()
         ), cycfi::elements::panel{}
     );
 
-    menu_button.on_click
-
     menu_button.menu(menu);
 
     content(
@@ -177,7 +175,7 @@ void MainView::InitView()
                     ),
                     cycfi::elements::vstretch(1.5f,
                         cycfi::elements::margin({ 10, 10, 10, 10 },
-                            cycfi::elements::pane("Temprature",
+                            cycfi::elements::pane("Temperature",
                                 cycfi::elements::layer(
 								    cycfi::elements::margin({ 15, 15, 15, 15 },
                                         cycfi::elements::vtile(
