@@ -39,7 +39,12 @@ set(ELEMENTS_APP_RESOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/Modal.cpp" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/LoginView.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/LoginView.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Resources/sun.png")
+    "${CMAKE_CURRENT_SOURCE_DIR}/Resources/sun.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Resources/cloud-sun.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Resources/rain.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Resources/snow.png"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Resources/thunder.png"
+)
 
 # For your custom application icon on macOS or Windows see cmake/AppIcon.cmake module
 include(AppIcon)

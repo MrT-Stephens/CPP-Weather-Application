@@ -1,11 +1,11 @@
 #include "../Header Files/Controller.h"
 
-Controller::Controller(std::unique_ptr<cycfi::elements::app> app)
-	: m_App(std::move(app)), m_Window(std::make_shared<cycfi::elements::window>(m_App->name()))
+Controller::Controller(int argc, char* argv[], std::string name, std::string id)
+	: app(argc, argv, name, id), m_Window(std::make_shared<cycfi::elements::window>(this->name()))
 {
 	m_Window->on_close = [this]()
 		{
-			m_App->stop();
+			this->stop();
 		};
 
 	m_CurrentView = std::make_shared<MainView>(m_Window);
@@ -16,7 +16,9 @@ void Controller::Init()
 	if (auto view = std::any_cast<std::shared_ptr<MainView>>(m_CurrentView))
 	{
 		view->InitView();
+		view->UpdateWeather("cloud-sun.png", 23);
+		view->InitView();
 	}
 
-	m_App->run();
+	this->run();
 }

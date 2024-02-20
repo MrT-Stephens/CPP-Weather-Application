@@ -6,15 +6,14 @@
 #include "../Header Files/MainView.h"
 #include "../Header Files/LoginView.h"
 
-class Controller
+class Controller : public cycfi::elements::app
 {
 protected:
-	std::unique_ptr<cycfi::elements::app> m_App;
 	std::shared_ptr<cycfi::elements::window> m_Window;
 	std::any m_CurrentView;
 
 public:
-	Controller(std::unique_ptr<cycfi::elements::app> app);
+	Controller(int argc, char* argv[], std::string name, std::string id);
 
 	void Init();
 };

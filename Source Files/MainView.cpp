@@ -248,28 +248,48 @@ void MainView::UpdateTimeAndDate(const std::string& time_hh24_mm, const std::str
 	m_DateLabel.set_text(date_day_dd_mon_yyyy);
 }
 
-void MainView::UpdateWeather(const std::array<std::pair<std::string_view, std::string_view>, 5>& weather_and_times)
+void MainView::UpdateWeather(const std::string_view& weather, int32_t current_hour)
 {
-    for (uint64_t i = 0; i < weather_and_times.size(); ++i)
+    m_WeatherImage.set_image(weather);
+
+    for (uint64_t i = 0; i < m_WeatherTimeLabels.size(); i++)
     {
-        m_WeatherTimeLabels[i].first.set_text(weather_and_times[i].first);
-		m_WeatherTimeLabels[i].second.set_image(weather_and_times[i].second);
+        // Calculate the adjusted hour based on the index
+        uint32_t adjusted_hour = current_hour + i - 2; // Adjusted hour = current_hour + index - 2
+
+        if (adjusted_hour < 0)
+        {
+			adjusted_hour = 24 + adjusted_hour;
+		}
+        else if (adjusted_hour > 23)
+        {
+			adjusted_hour = adjusted_hour - 24;
+		}
+
+        std::string formatted_hour = std::to_string(adjusted_hour);
+        formatted_hour = std::string(2 - formatted_hour.length(), '0') + formatted_hour + ":00";
+
+        // Set the adjusted hour to the text of the first element in the pair
+        m_WeatherTimeLabels[i].first.set_text(formatted_hour);
+
+        // Set the weather image for the second element in the pair
+        m_WeatherTimeLabels[i].second.set_image(weather);
     }
 }
 
-void MainView::UpdateHumidity(const uint32_t& humidity, const uint32_t& humidity_yesterday)
+void MainView::UpdateHumidity(int32_t humidity, int32_t humidity_yesterday)
 {
     m_HumidityLabel.set_text(std::to_string(humidity) + "%");
 	m_HumidityYesterdayLabel.set_text("Up " + std::to_string(humidity - humidity_yesterday) + "% from yesterday");
 }
 
-void MainView::UpdateWind(const uint32_t& wind_speed, const std::string_view& wind_direction)
+void MainView::UpdateWind(int32_t wind_speed, const std::string_view& wind_direction)
 {
 	m_WindLabel.set_text(std::to_string(wind_speed));
 	m_WindDirectionLabel.set_text(wind_direction);
 }
 
-void MainView::UpdateTemperature(const uint32_t& temperature, const uint32_t& dew_point, const uint32_t& feels_like, const uint32_t& temperature_yesterday)
+void MainView::UpdateTemperature(int32_t temperature, int32_t dew_point, int32_t feels_like, int32_t temperature_yesterday)
 {
 	m_TemperatureLabel.set_text(std::to_string(temperature));
 	m_TemperatureDewPointLabel.set_text(std::to_string(dew_point));

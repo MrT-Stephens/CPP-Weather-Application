@@ -45,11 +45,11 @@ public:
 
 	void UpdateTimeAndDate(const std::string& time_hh24_mm, const std::string_view& date_day_dd_mon_yyyy);
 
-	void UpdateWeather(const std::array<std::pair<std::string_view, std::string_view>, 5>& weather_and_times);
+	void UpdateWeather(const std::string_view& weather, int32_t current_hour);
 
-	void UpdateHumidity(const uint32_t& humidity, const uint32_t& humidity_yesterday);
+	void UpdateHumidity(int32_t humidity, int32_t humidity_yesterday);
 
-	void UpdateWind(const uint32_t& wind_speed, const std::string_view& wind_direction);
+	void UpdateWind(int32_t wind_speed, const std::string_view& wind_direction);
 
-	void UpdateTemperature(const uint32_t& temperature, const uint32_t& dew_point, const uint32_t& feels_like, const uint32_t& temperature_yesterday);
+	void UpdateTemperature(int32_t temperature, int32_t dew_point, int32_t feels_like, int32_t temperature_yesterday);
 };
