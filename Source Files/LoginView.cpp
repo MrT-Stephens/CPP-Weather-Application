@@ -1,14 +1,14 @@
 #include "../Header Files/LoginView.h"
 
-LoginView::LoginView(std::shared_ptr<cycfi::elements::window> window)
-    : View(window)
+LoginView::LoginView(std::shared_ptr<cycfi::elements::view> main_view)
+    : View(main_view)
 {
 
 }
 
 void LoginView::InitView()
 {
-    content(
+    m_MainView->content(
         cycfi::elements::margin({ 20, 20, 20, 20 },
             cycfi::elements::vtile(
                 cycfi::elements::align_center_middle(
@@ -53,6 +53,7 @@ void LoginView::InitView()
 void LoginView::UpdateView()
 {
     this->InitView();
+    m_MainView->refresh();
 }
 
 void LoginView::SetLoginCallback(std::function<void(bool)>&& callback)

@@ -1,12 +1,12 @@
-#include "../Header Files/MainView.h"
+#include "../Header Files/DataView.h"
 
-MainView::MainView(std::shared_ptr<cycfi::elements::window> window)
-    : View(window)
+DataView::DataView(std::shared_ptr<cycfi::elements::view> main_view)
+    : View(main_view)
 {
 
 }
 
-void MainView::InitView()
+void DataView::InitView()
 {
     auto box = cycfi::elements::margin({ 10, 10, 10, 10 }, cycfi::elements::rbox_element{ cycfi::elements::rbox(m_BackgroundColor.level(1.5f)) });
 
@@ -24,7 +24,7 @@ void MainView::InitView()
 
     menu_button.menu(menu);
 
-    content(
+    m_MainView->content(
         cycfi::elements::pane(
             cycfi::elements::htile(
                 cycfi::elements::align_middle(
@@ -237,18 +237,19 @@ void MainView::InitView()
     );
 }
 
-void MainView::UpdateView()
+void DataView::UpdateView()
 {
     this->InitView();
+    m_MainView->refresh();
 }
 
-void MainView::UpdateTimeAndDate(const std::string& time_hh24_mm, const std::string_view& date_day_dd_mon_yyyy)
+void DataView::UpdateTimeAndDate(const std::string& time_hh24_mm, const std::string_view& date_day_dd_mon_yyyy)
 {
 	m_TimeLabel.set_text(time_hh24_mm);
 	m_DateLabel.set_text(date_day_dd_mon_yyyy);
 }
 
-void MainView::UpdateWeather(const std::string_view& weather, int32_t current_hour)
+void DataView::UpdateWeather(const std::string_view& weather, int32_t current_hour)
 {
     m_WeatherImage.set_image(weather);
 
@@ -277,19 +278,19 @@ void MainView::UpdateWeather(const std::string_view& weather, int32_t current_ho
     }
 }
 
-void MainView::UpdateHumidity(int32_t humidity, int32_t humidity_yesterday)
+void DataView::UpdateHumidity(int32_t humidity, int32_t humidity_yesterday)
 {
     m_HumidityLabel.set_text(std::to_string(humidity) + "%");
 	m_HumidityYesterdayLabel.set_text("Up " + std::to_string(humidity - humidity_yesterday) + "% from yesterday");
 }
 
-void MainView::UpdateWind(int32_t wind_speed, const std::string_view& wind_direction)
+void DataView::UpdateWind(int32_t wind_speed, const std::string_view& wind_direction)
 {
 	m_WindLabel.set_text(std::to_string(wind_speed));
 	m_WindDirectionLabel.set_text(wind_direction);
 }
 
-void MainView::UpdateTemperature(int32_t temperature, int32_t dew_point, int32_t feels_like, int32_t temperature_yesterday)
+void DataView::UpdateTemperature(int32_t temperature, int32_t dew_point, int32_t feels_like, int32_t temperature_yesterday)
 {
 	m_TemperatureLabel.set_text(std::to_string(temperature));
 	m_TemperatureDewPointLabel.set_text(std::to_string(dew_point));

@@ -17,7 +17,7 @@ private:
 	u_Button m_LoginButton{ cycfi::elements::button("Login", 1.1f) };
 
 public:
-	LoginView(std::shared_ptr<cycfi::elements::window> window);
+	LoginView(std::shared_ptr<cycfi::elements::view> main_view);
 
 	void InitView() override;
 

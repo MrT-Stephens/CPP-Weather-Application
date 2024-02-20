@@ -4,7 +4,7 @@
 
 #include "../Header Files/View.h"
 
-class MainView : public View
+class DataView : public View
 {
 private:
 	// Time and Date Items
@@ -37,7 +37,7 @@ private:
 	cycfi::elements::label m_TemperatureYesterdayLabel{ "26" };
 
 public:
-	MainView(std::shared_ptr<cycfi::elements::window> window);
+	DataView(std::shared_ptr<cycfi::elements::view> main_view);
 
 	void InitView() override;
 

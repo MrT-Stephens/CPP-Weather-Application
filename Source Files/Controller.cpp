@@ -8,16 +8,35 @@ Controller::Controller(int argc, char* argv[], std::string name, std::string id)
 			this->stop();
 		};
 
-	m_CurrentView = std::make_shared<MainView>(m_Window);
+	m_MainView = std::make_shared<cycfi::elements::view>(*m_Window.get());
+
+	m_CurrentView = std::make_shared<DataView>(m_MainView);
 }
 
 void Controller::Init()
 {
-	if (auto view = std::any_cast<std::shared_ptr<MainView>>(m_CurrentView))
+	if (auto view = std::any_cast<std::shared_ptr<DataView>>(m_CurrentView))
 	{
 		view->InitView();
-		view->UpdateWeather("cloud-sun.png", 23);
-		view->InitView();
+
+		m_MainView->post(std::chrono::seconds{2}, [this]()
+		{
+			if (auto view = std::any_cast<std::shared_ptr<DataView>>(m_CurrentView))
+			{
+				view->UpdateWeather("cloud.png", 23);
+				view->UpdateView();
+			}
+		});
+
+		m_MainView->post(std::chrono::seconds{ 4 }, [this]()
+		{
+			m_CurrentView = std::make_shared<LoginView>(m_MainView);
+
+			if (auto view = std::any_cast<std::shared_ptr<LoginView>>(m_CurrentView))
+			{
+				view->UpdateView();
+			}
+		});
 	}
 
 	this->run();
