@@ -27,17 +27,6 @@ void Controller::Init()
 		this->UpdateSensorData();
 	});
 
-	m_MainView->post(std::chrono::seconds(6), [this]()
-		{
-			m_CurrentView.reset();
-			m_CurrentView = std::make_shared<LoginView>(m_MainView);
-
-			if (auto view = std::any_cast<std::shared_ptr<LoginView>>(m_CurrentView))
-			{
-				view->UpdateView();
-			}
-		});
-
 	this->run();
 }
 
@@ -66,9 +55,6 @@ void Controller::UpdateSensorData()
 			break;
 		case WeatherType::Thunderstorm:
 			img_path = "thunder.png";
-			break;
-		default:
-			img_path = "sun.png";
 			break;
 		}
 

@@ -42,6 +42,7 @@ set(ELEMENTS_APP_RESOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Sensor.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/WeatherSensor.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/WeatherSensor.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Xml.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/cloud.png"
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/sun.png"
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/cloud-sun.png"
