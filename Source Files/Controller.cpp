@@ -25,7 +25,7 @@ void Controller::Init()
 				{
 					auto&& on_click = [this]()
 					{
-						m_MainView->post(std::chrono::seconds(2), [this]()
+						m_MainView->post(std::chrono::seconds(1), [this]()
 						{
 							m_CurrentView = std::make_shared<DataView>(m_MainView);
 

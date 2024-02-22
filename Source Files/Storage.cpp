@@ -13,59 +13,31 @@ Storage::Storage()
 	m_Key = key;
 }
 
+Storage::Storage(const std::string& app_name)
+	: m_CurrentDirectory(std::filesystem::current_path().string())
+{
+	std::string key = std::to_string(typeid(this).hash_code());
+
+	for (char& c : key)
+	{
+		c = (char)((int)c + (int)'a');
+	}
+
+	m_Key = key;
+
+	m_CurrentDirectory += "\\" + app_name;
+}
+
 Storage Storage::s_Instance;
 
 std::string Storage::Encrypt(const std::string& data, const std::string& key)
 {
-	std::string text = "";
-
-	uint64_t keyLength = key.length();
-
-	for (uint64_t i = 0; i < data.length(); ++i) 
-	{
-		char c = data[i];
-
-		char shift = key[i % keyLength];
-
-		if (isalpha(c)) 
-		{
-			char base = islower(c) ? 'a' : 'A';
-			char shiftedChar = static_cast<char>((c - base - (tolower(shift) - 'a') + 26) % 26 + base);
-			text += shiftedChar;
-		}
-		else 
-		{
-			text += c;
-		}
-	}
-	return text;
+	return data;
 }
 
 std::string Storage::Decrypt(const std::string& data, const std::string& key)
 {
-	std::string text = "";
-
-	uint64_t keyLength = key.length();
-
-	for (uint64_t i = 0; i < data.length(); ++i)
-	{
-		char c = data[i];
-
-		char shift = key[i % keyLength];
-
-		if (isalpha(c))
-		{
-			char base = islower(c) ? 'a' : 'A';
-			char shiftedChar = static_cast<char>((c - base - (tolower(shift) - 'a') + 26) % 26 + base);
-			text += shiftedChar;
-		}
-		else
-		{
-			text += c;
-		}
-	}
-
-	return text;
+	return data;
 }
 
 bool Storage::WriteInternal(const std::string& name, const std::unordered_map<std::string, std::string>& data)

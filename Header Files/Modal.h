@@ -1,11 +1,12 @@
 #pragma once
 
 #include "../Header Files/WeatherSensor.h"
+#include "../Header Files/NoCopy.h"
 
 #include <memory>
 #include <chrono>
 
-class Modal
+class Modal : private NoCopy
 {
 private:
 	std::chrono::seconds m_SampleRate;
