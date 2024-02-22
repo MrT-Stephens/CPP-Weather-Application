@@ -10,22 +10,52 @@ Controller::Controller(int argc, char* argv[], std::string name, std::string id)
 
 	m_MainView = std::make_shared<cycfi::elements::view>(*m_Window.get());
 
-	m_CurrentView = std::make_shared<DataView>(m_MainView);
+	m_CurrentView = std::make_shared<LoginView>(m_MainView);
 
 	m_Modal = std::make_unique<Modal>(5);
 }
 
 void Controller::Init()
 {
-	if (auto view = std::any_cast<std::shared_ptr<DataView>>(m_CurrentView))
+	if (auto view = std::any_cast<std::shared_ptr<LoginView>>(m_CurrentView))
 	{
+		view->SetLoginCallback([this, view](bool)
+			{
+				if (m_Authenticator.Authenticate(view->GetEmail(), view->GetPassword()).first)
+				{
+					auto&& on_click = [this]()
+					{
+						m_MainView->post(std::chrono::seconds(2), [this]()
+						{
+							m_CurrentView = std::make_shared<DataView>(m_MainView);
+
+							if (auto view = std::any_cast<std::shared_ptr<DataView>>(m_CurrentView))
+							{
+								view->InitView();
+							}
+						});
+					};
+
+					auto popup = cycfi::elements::message_box1(*m_MainView.get(), "You have successfully logged in", cycfi::elements::icons::info, on_click);
+
+					cycfi::elements::open_popup(popup, *m_MainView.get());
+				}
+				else
+				{
+					auto&& on_click = []()
+					{
+						return;
+					};
+
+					auto popup = cycfi::elements::message_box1(*m_MainView.get(), "Invalid login infomation", cycfi::elements::icons::info, on_click);
+
+					cycfi::elements::open_popup(popup, *m_MainView.get());
+				}
+			}
+		);
+
 		view->InitView();
 	}
-
-	m_MainView->post(m_Modal->GetSampleRate(), [this]()
-	{
-		this->UpdateSensorData();
-	});
 
 	this->run();
 }

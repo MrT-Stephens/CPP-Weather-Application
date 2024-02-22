@@ -1,8 +1,10 @@
 #pragma once
 
+#include "../Header Files/NoCopy.h"
+
 #include <elements.hpp>
 
-class View
+class View : private NoCopy
 {
 protected:
 	cycfi::artist::color m_BackgroundColor;

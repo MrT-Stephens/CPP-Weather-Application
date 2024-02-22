@@ -25,6 +25,9 @@ namespace mrt
 
 	struct XML_Attribute
 	{
+		XML_Attribute() { }
+		XML_Attribute(const std::string& name, const std::string& value) : m_Name(name), m_Value(value) { }
+
 		std::string m_Name;
 		std::string m_Value;
 	};

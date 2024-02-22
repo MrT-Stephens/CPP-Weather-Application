@@ -6,8 +6,27 @@ LoginView::LoginView(std::shared_ptr<cycfi::elements::view> main_view)
 
 }
 
+LoginView::~LoginView()
+{
+    m_Email = "";
+    m_Password = "";
+}
+
 void LoginView::InitView()
 {
+    auto email_entry = cycfi::elements::input_box("", 1.2f);
+    auto password_entry = cycfi::elements::input_box("", 1.2f);
+
+    email_entry.second->on_text = [this](std::string_view text)
+    {
+        m_Email = text.data();
+    };
+
+    password_entry.second->on_text = [this](std::string_view text)
+	{
+		m_Password = text.data();
+	};
+
     m_MainView->content(
         cycfi::elements::margin({ 20, 20, 20, 20 },
             cycfi::elements::vtile(
@@ -21,7 +40,7 @@ void LoginView::InitView()
                                             cycfi::elements::label("Email").text_align(cycfi::elements::canvas::left),
                                             cycfi::elements::hmin_size(200,
                                                 cycfi::elements::margin({ 0, 10, 0, 10 },
-                                                    m_EmailEntry.first
+                                                    email_entry.first
                                                 )
                                             )
                                         ),
@@ -29,7 +48,7 @@ void LoginView::InitView()
                                             cycfi::elements::label("Password").text_align(cycfi::elements::canvas::left),
                                             cycfi::elements::hmin_size(200,
                                                 cycfi::elements::margin({ 0, 10, 0, 10 },
-                                                    m_PasswordEntry.first
+                                                    password_entry.first
                                                 )
                                             )
                                         ),
@@ -56,7 +75,7 @@ void LoginView::UpdateView()
     m_MainView->refresh();
 }
 
-void LoginView::SetLoginCallback(std::function<void(bool)>&& callback)
+void LoginView::SetLoginCallback(std::function<void(bool)> callback)
 {
-    m_LoginButton.on_click = std::move(callback);
+    m_LoginButton.on_click = callback;
 }
