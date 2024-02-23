@@ -5,15 +5,19 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <variant>
+#include <any>
+#include <memory>
 
 enum class AccessType : uint8_t
 {
 	NO_ACCESS = 0x00,
 	READ = 0x01,
 	WRITE = 0x02,
-	READ_WRITE = 0x04
+	READ_WRITE = READ | WRITE
 };
 
+template <typename... T>
 class Permission : private NoCopy
 {
 public:
@@ -23,7 +27,7 @@ private:
 public:
 	Permission()
 	{
-
+		m_ResourceAccess.insert(std::make_pair("admin@admin.com", Resources(sizeof...(T), (uint8_t)AccessType::READ_WRITE)));
 	}
 
 	~Permission()
@@ -31,15 +35,20 @@ public:
 
 	}
 
-	uint8_t CheckPermission(const std::string& email, uint32_t resource_id)
+	bool HasFlag(uint8_t access, uint8_t flag)
+	{
+		return (access & flag) != 0;
+	}
+
+	AccessType CheckPermission(const std::string& email, uint32_t resource_id)
 	{
 		std::unordered_map<std::string, Resources>::iterator it = m_ResourceAccess.find(email);
 
 		if (it != m_ResourceAccess.end() && resource_id <= it->second.size())
 		{
-			return it->second[resource_id];
+			return (AccessType)it->second[resource_id];
 		}
 
-		return (uint8_t)AccessType::NO_ACCESS;
+		return AccessType::NO_ACCESS;
 	}
 };

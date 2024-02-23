@@ -13,21 +13,6 @@ Storage::Storage()
 	m_Key = key;
 }
 
-Storage::Storage(const std::string& app_name)
-	: m_CurrentDirectory(std::filesystem::current_path().string())
-{
-	std::string key = std::to_string(typeid(this).hash_code());
-
-	for (char& c : key)
-	{
-		c = (char)((int)c + (int)'a');
-	}
-
-	m_Key = key;
-
-	m_CurrentDirectory += "\\" + app_name;
-}
-
 Storage Storage::s_Instance;
 
 std::string Storage::Encrypt(const std::string& data, const std::string& key)

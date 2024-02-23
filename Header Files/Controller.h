@@ -16,8 +16,8 @@ private:
 	std::shared_ptr<cycfi::elements::view> m_MainView;
 	std::shared_ptr<cycfi::elements::window> m_Window;
 
-	Authenticator m_Authenticator;
 	Subject m_CurrentSubject;
+	Authenticator m_Authenticator;
 	
 	std::any m_CurrentView;
 public:

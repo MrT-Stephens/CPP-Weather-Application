@@ -18,7 +18,6 @@ private:
 	std::string m_Key;
 
 	Storage();
-	Storage(const std::string& app_name);
 
 	bool WriteInternal(const std::string& name, const std::unordered_map<std::string, std::string>& data);
 	bool ReadInternal(const std::string& name, std::unordered_map<std::string, std::string>& data);
