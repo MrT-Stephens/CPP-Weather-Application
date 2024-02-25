@@ -52,4 +52,9 @@ public:
 	{
 		return *GetSubject(email);
 	}
+
+	const std::vector<Subject>& GetAllSubjects() const
+	{
+		return m_Subjects;
+	}
 };

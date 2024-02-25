@@ -46,4 +46,9 @@ public:
 
 		m_SubjectInfo.Add(email, first_name, last_name, ProofID());
 	}
+
+	const std::vector<Subject>& GetSubjects() const
+	{
+		return m_SubjectInfo.GetAllSubjects();
+	}
 };
