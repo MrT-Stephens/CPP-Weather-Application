@@ -93,3 +93,50 @@ bool Storage::ReadInternal(const std::string& name, std::vector<Subject>& data)
 
 	return true;
 }
+
+bool Storage::WriteInternal(const std::string& name, const std::unordered_map<std::string, std::vector<uint8_t>>& data)
+{
+	mrt::XML_Node root(name);
+
+	for (const auto& [key, value] : data)
+	{
+		mrt::XML_Node node("user");
+		node.AddAttribute("email", Encrypt(key, m_Key));
+
+		for (uint64_t i = 0; i < value.size(); ++i)
+		{
+			mrt::XML_Node subNode(std::to_string(i), std::to_string(value[i]));
+			node.AddChild(subNode);
+		}
+
+		root.AddChild(node);
+	}
+
+	mrt::XML_Document doc(root, "1.0");
+
+	return (doc.WriteDocument(m_CurrentDirectory + "\\" + name + ".xml", doc) == mrt::XML_Document_FileError::SUCCESS) ? true : false;
+}
+
+bool Storage::ReadInternal(const std::string& name, std::unordered_map<std::string, std::vector<uint8_t>>& data)
+{
+	mrt::XML_Document doc;
+
+	if (doc.ReadDocument(m_CurrentDirectory + "\\" + name + ".xml", doc) != mrt::XML_Document_FileError::SUCCESS)
+		return false;
+
+	mrt::XML_Node root = doc.GetRoot();
+
+	for (const auto& node : root.GetAllChildren())
+	{
+		std::vector<uint8_t> vec;
+
+		for (const auto& subNode : node.GetAllChildren())
+		{
+			vec.push_back((uint8_t)std::stoul(subNode.GetValue()));
+		}
+
+		data.insert(std::make_pair(Decrypt(node.GetAttribute(0).m_Value, m_Key), vec));
+	}
+
+	return true;
+}

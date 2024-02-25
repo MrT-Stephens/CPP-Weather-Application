@@ -1,7 +1,9 @@
 #include "../Header Files/Controller.h"
 
 Controller::Controller(int argc, char* argv[], std::string name, std::string id)
-	: app(argc, argv, name, id), m_Window(std::make_shared<cycfi::elements::window>(this->name()))
+	: app(argc, argv, name, id), 
+	  m_Modal(std::make_unique<Modal>(5U)),
+	  m_Window(std::make_shared<cycfi::elements::window>(this->name()))
 {
 	m_Window->on_close = [this]()
 	{
@@ -10,9 +12,7 @@ Controller::Controller(int argc, char* argv[], std::string name, std::string id)
 
 	m_MainView = std::make_shared<cycfi::elements::view>(*m_Window.get());
 
-	m_CurrentView = std::make_shared<LoginView>(m_MainView);
-
-	m_Modal = std::make_unique<Modal>(5);
+	m_CurrentView = std::make_shared<LoginView>(m_MainView, (uint8_t)AccessType::READ_WRITE);
 }
 
 void Controller::Init()
@@ -21,13 +21,17 @@ void Controller::Init()
 	{
 		view->SetLoginCallback([this, view](bool)
 			{
-				if (m_Authenticator.Authenticate(view->GetEmail(), view->GetPassword()).first)
+				auto [verified, subject] = m_Authenticator.Authenticate(view->GetEmail(), view->GetPassword());
+
+				m_CurrentSubject = subject;
+
+				if (verified)
 				{
 					auto&& on_click = [this]()
 					{
-						m_MainView->post(std::chrono::seconds(1), [this]()
+						m_MainView->post(std::chrono::seconds(2), [this]()
 						{
-							m_CurrentView = std::make_shared<DataView>(m_MainView);
+							m_CurrentView = m_ResourceAccessor.AccessResource<DataView>(m_MainView, m_CurrentSubject, 0);
 
 							if (auto view = std::any_cast<std::shared_ptr<DataView>>(m_CurrentView))
 							{

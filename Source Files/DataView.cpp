@@ -1,7 +1,7 @@
 #include "../Header Files/DataView.h"
 
-DataView::DataView(std::shared_ptr<cycfi::elements::view> main_view)
-    : View(main_view)
+DataView::DataView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access)
+    : View(main_view, user_access)
 {
 
 }
@@ -12,13 +12,14 @@ void DataView::InitView()
 
     auto menu_button = cycfi::elements::button_menu("Menu", cycfi::elements::menu_position::bottom_left);
 
+    auto menu_item = cycfi::elements::menu_item("About");
+
     auto menu = cycfi::elements::layer(
         cycfi::elements::vtile(
-            cycfi::elements::menu_item("Account"),
-            cycfi::elements::menu_item("Settings"),
-            cycfi::elements::menu_item("About"),
-            cycfi::elements::menu_item("Admin"),
-            cycfi::elements::menu_item("Sign Out")
+            m_AboutMenuItem,
+            m_ActuatorsMenuItem,
+            m_UsersMenuItem,
+            m_SignOutMenuItem
         ), cycfi::elements::panel{}
     );
 
@@ -296,4 +297,24 @@ void DataView::UpdateTemperature(int32_t temperature, int32_t dew_point, int32_t
 	m_TemperatureDewPointLabel.set_text(std::to_string(dew_point));
 	m_TemperatureFeelsLikeLabel.set_text(std::to_string(feels_like));
 	m_TemperatureYesterdayLabel.set_text(std::to_string(temperature_yesterday));
+}
+
+void DataView::SetOnAboutMenuItemClicked(std::function<void()> callback)
+{
+	m_AboutMenuItem.on_click = callback;
+}
+
+void DataView::SetOnActuatorsMenuItemClicked(std::function<void()> callback)
+{
+	m_ActuatorsMenuItem.on_click = callback;
+}
+
+void DataView::SetOnUsersMenuItemClicked(std::function<void()> callback)
+{
+	m_UsersMenuItem.on_click = callback;
+}
+
+void DataView::SetOnSignOutMenuItemClicked(std::function<void()> callback)
+{
+	m_SignOutMenuItem.on_click = callback;
 }

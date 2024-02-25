@@ -3,7 +3,6 @@
 #include "../Header Files/Xml.h"
 #include "../Header Files/Subject.h"
 #include "../Header Files/NoCopy.h"
-#include "../Header Files/Permission.h"
 
 #include <filesystem>
 #include <unordered_map>
@@ -25,8 +24,8 @@ private:
 	bool WriteInternal(const std::string& name, const std::vector<Subject>& data);
 	bool ReadInternal(const std::string& name, std::vector<Subject>& data);
 
-	bool WriteInternal(const std::string& name, const std::unordered_map<std::string, Permission::Resources>& data);
-	bool ReadInternal(const std::string& name, std::unordered_map<std::string, Permission::Resources>& data);
+	bool WriteInternal(const std::string& name, const std::unordered_map<std::string, std::vector<uint8_t>>& data);
+	bool ReadInternal(const std::string& name, std::unordered_map<std::string, std::vector<uint8_t>>& data);
 
 	std::string Encrypt(const std::string& data, const std::string& key);
 	std::string Decrypt(const std::string& data, const std::string& key);
@@ -53,12 +52,12 @@ public:
 		return s_Instance.ReadInternal(name, data);
 	}
 
-	static bool Write(const std::string& name, const std::unordered_map<std::string, Permission::Resources>& data)
+	static bool Write(const std::string& name, const std::unordered_map<std::string, std::vector<uint8_t>>& data)
 	{
 		return s_Instance.WriteInternal(name, data);
 	}
 
-	static bool Read(const std::string& name, std::unordered_map<std::string, Permission::Resources>& data)
+	static bool Read(const std::string& name, std::unordered_map<std::string, std::vector<uint8_t>>& data)
 	{
 		return s_Instance.ReadInternal(name, data);
 	}

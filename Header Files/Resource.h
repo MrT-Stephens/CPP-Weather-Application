@@ -4,36 +4,24 @@
 #include "../Header Files/Subject.h"
 #include "../Header Files/Permission.h"
 
-#include <any>
+#include <elements.hpp>
 
+template <typename... Types>
 class Resource : private NoCopy
 {
 private:
-	Permission m_Permission;
+	Permission<Types...> m_Permission;
 public:
 	Resource()
 	{
 
 	}
 
-	std::pair<bool, std::any> AccessResource(const Subject& subject, uint32_t resource_id = 0, AccessType access_type = AccessType::NO_ACCESS)
+	template<typename View>
+	std::shared_ptr<View> AccessResource(std::shared_ptr<cycfi::elements::view> main_view, const Subject& subject, uint32_t resource_id = 0)
 	{
-		uint8_t user_permission = m_Permission.CheckPermission(subject.GetEmail(), resource_id);
+		uint8_t user_permission = (uint8_t)m_Permission.CheckPermission(subject.GetEmail(), resource_id);
 
-		switch (resource_id)
-		{
-		case 0:
-
-			break;
-		case 1:
-
-			break;
-		case 2:
-
-			break;
-		case 3:
-
-			break;
-		}
+		return std::make_shared<View>(main_view, user_permission);
 	}
 };

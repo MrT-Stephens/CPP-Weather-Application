@@ -8,13 +8,17 @@
 #include "../Header Files/Modal.h"
 #include "../Header Files/Authenticator.h"
 #include "../Header Files/NoCopy.h"
+#include "../Header Files/Resource.h"
 
 class Controller : public cycfi::elements::app, private NoCopy
 {
+public:
+	using ResourceAccessor = Resource<DataView>;
 private:
 	std::unique_ptr<Modal> m_Modal;
 	std::shared_ptr<cycfi::elements::view> m_MainView;
 	std::shared_ptr<cycfi::elements::window> m_Window;
+	ResourceAccessor m_ResourceAccessor;
 
 	Subject m_CurrentSubject;
 	Authenticator m_Authenticator;

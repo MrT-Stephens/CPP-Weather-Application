@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Header Files/NoCopy.h"
+#include "../Header Files/Storage.h"
 
 #include <string>
 #include <vector>
@@ -27,17 +28,15 @@ private:
 public:
 	Permission()
 	{
-		m_ResourceAccess.insert(std::make_pair("admin@admin.com", Resources(sizeof...(T), (uint8_t)AccessType::READ_WRITE)));
+		if (!Storage::Read(std::to_string(typeid(this).hash_code()), m_ResourceAccess))
+		{
+			m_ResourceAccess.insert(std::make_pair("admin@admin.com", Resources(sizeof...(T), (uint8_t)AccessType::READ_WRITE)));
+		}
 	}
 
 	~Permission()
 	{
-
-	}
-
-	bool HasFlag(uint8_t access, uint8_t flag)
-	{
-		return (access & flag) != 0;
+		Storage::Write(std::to_string(typeid(this).hash_code()), m_ResourceAccess);
 	}
 
 	AccessType CheckPermission(const std::string& email, uint32_t resource_id)

@@ -5,17 +5,15 @@
 class LoginView : public View
 {
 public:
-	using u_Button = cycfi::elements::proxy<cycfi::elements::button_styler_gen<cycfi::elements::button_styler_with_body_color<
-					 cycfi::elements::button_styler_with_size<cycfi::elements::basic_button_styler>>>, cycfi::elements::basic_button>;
-
+	using Button = cycfi::elements::proxy<cycfi::elements::button_styler_gen<cycfi::elements::button_styler_with_body_color<
+				   cycfi::elements::button_styler_with_size<cycfi::elements::basic_button_styler>>>, cycfi::elements::basic_button>;
 private:
-	u_Button m_LoginButton{ cycfi::elements::button("Login", 1.1f) };
+	Button m_LoginButton{ cycfi::elements::button("Login", 1.1f) };
 
 	std::string m_Email;
 	std::string m_Password;
-
 public:
-	LoginView(std::shared_ptr<cycfi::elements::view> main_view);
+	LoginView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access);
 	~LoginView();
 
 	void InitView() override;

@@ -18,7 +18,7 @@ public:
 		std::srand(std::time(nullptr));
 	}
 
-	std::pair<bool, ProofID> Authenticate(const std::string& email, const std::string& password)
+	std::pair<bool, Subject> Authenticate(const std::string& email, const std::string& password)
 	{
 		AuthenticatorInfo info;
 
@@ -30,11 +30,11 @@ public:
 			Subject temp = m_SubjectInfo.Get(email);
 			m_SubjectInfo.Add(email, temp.GetFirstName(), temp.GetLastName(), proof);
 
-			return std::make_pair(true, proof);
+			return std::make_pair(true, temp);
 		}
 		else
 		{
-			return std::make_pair(false, ProofID());
+			return std::make_pair(false, Subject());
 		}
 	}
 

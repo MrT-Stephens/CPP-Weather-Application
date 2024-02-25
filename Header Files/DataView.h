@@ -6,7 +6,16 @@
 
 class DataView : public View
 {
+public:
+	using MenuItem = cycfi::elements::proxy<cycfi::elements::margin_element<cycfi::elements::hmargin_rect, 
+					 cycfi::elements::halign_element<cycfi::elements::label>>, cycfi::elements::basic_menu_item_element>;
 private:
+	// Menu Items
+	MenuItem m_AboutMenuItem{ cycfi::elements::menu_item("About") };
+	MenuItem m_ActuatorsMenuItem{ cycfi::elements::menu_item("Actuators") };
+	MenuItem m_UsersMenuItem{ cycfi::elements::menu_item("Users") };
+	MenuItem m_SignOutMenuItem{ cycfi::elements::menu_item("Sign Out") };
+
 	// Time and Date Items
 	cycfi::elements::label m_TimeLabel{ "21:00" };
 	cycfi::elements::label m_DateLabel{ "Monday 19 - February 2024" };
@@ -37,7 +46,7 @@ private:
 	cycfi::elements::label m_TemperatureYesterdayLabel{ "26" };
 
 public:
-	DataView(std::shared_ptr<cycfi::elements::view> main_view);
+	DataView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access);
 
 	void InitView() override;
 
@@ -52,4 +61,12 @@ public:
 	void UpdateWind(int32_t wind_speed, const std::string_view& wind_direction);
 
 	void UpdateTemperature(int32_t temperature, int32_t dew_point, int32_t feels_like, int32_t temperature_yesterday);
+
+	void SetOnAboutMenuItemClicked(std::function<void()> callback);
+
+	void SetOnActuatorsMenuItemClicked(std::function<void()> callback);
+
+	void SetOnUsersMenuItemClicked(std::function<void()> callback);
+	
+	void SetOnSignOutMenuItemClicked(std::function<void()> callback);
 };

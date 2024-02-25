@@ -30,7 +30,6 @@ set(ELEMENTS_APP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Main.cpp)
 
 set(ELEMENTS_APP_RESOURCES 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/View.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/View.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/DataView.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/DataView.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Controller.h"
