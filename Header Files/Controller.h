@@ -9,6 +9,7 @@
 #include "../Header Files/Authenticator.h"
 #include "../Header Files/NoCopy.h"
 #include "../Header Files/Resource.h"
+#include "../Header Files/UserView.h"
 
 class Controller : public cycfi::elements::app, private NoCopy
 {

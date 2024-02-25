@@ -12,12 +12,32 @@ Controller::Controller(int argc, char* argv[], std::string name, std::string id)
 
 	m_MainView = std::make_shared<cycfi::elements::view>(*m_Window.get());
 
-	m_CurrentView = std::make_shared<LoginView>(m_MainView, (uint8_t)AccessType::READ_WRITE);
+	m_CurrentView = std::make_shared<UserView>(m_MainView, (uint8_t)AccessType::READ_WRITE);
 }
 
 void Controller::Init()
 {
-	if (auto view = std::any_cast<std::shared_ptr<LoginView>>(m_CurrentView))
+	if (auto view = std::any_cast<std::shared_ptr<UserView>>(m_CurrentView))
+	{
+		//view->InitView();
+
+		auto data = m_Authenticator.GetSubjects();
+
+		std::vector<std::vector<std::string>> user_data;
+
+		for (auto& subject : data)
+		{
+			std::vector<std::string> vec;
+			subject >> vec;
+			user_data.push_back(vec);
+		}
+
+		view->SetUserData(user_data);
+
+		view->UpdateView();
+	}
+
+	/*if (auto view = std::any_cast<std::shared_ptr<LoginView>>(m_CurrentView))
 	{
 		view->SetLoginCallback([this, view](bool)
 			{
@@ -59,7 +79,7 @@ void Controller::Init()
 		);
 
 		view->InitView();
-	}
+	}*/
 
 	this->run();
 }

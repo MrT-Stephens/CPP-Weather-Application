@@ -55,6 +55,7 @@ set(ELEMENTS_APP_RESOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Resource.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/UserView.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/UserView.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/ElementsTable.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/cloud.png"
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/sun.png"
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/cloud-sun.png"

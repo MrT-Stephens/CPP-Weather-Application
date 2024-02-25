@@ -4,6 +4,7 @@
 #include "../Header Files/NoCopy.h"
 
 #include <string>
+#include <vector>
 
 class Subject
 {
@@ -26,4 +27,11 @@ public:
 	std::string GetFirstName() const { return m_FirstName; }
 	std::string GetLastName() const { return m_LastName; }
 	std::string GetFullName() const { return m_FirstName + " " + m_LastName; }
+
+	friend void operator>>(const Subject& subject, std::vector<std::string>& vec)
+	{
+		vec.push_back(subject.m_Email);
+		vec.push_back(subject.m_FirstName);
+		vec.push_back(subject.m_LastName);
+	}
 };

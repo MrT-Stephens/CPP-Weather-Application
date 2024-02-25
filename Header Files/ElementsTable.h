@@ -1,0 +1,61 @@
+#pragma once
+
+#include <elements.hpp>
+
+class TableCellComposer
+{
+public:
+    using composer_fn = std::function<cycfi::elements::element_ptr(const std::string& str, uint64_t line, uint64_t index)>;
+
+    TableCellComposer(const std::vector<std::vector<std::string>>& data, uint64_t lines, uint64_t columns, composer_fn&& fn)
+        : m_Data(data), m_NumOfLines(lines), m_NumOfCols(columns), m_Composer(fn)
+    {
+
+    }
+
+    cycfi::elements::element_ptr Compose(uint64_t line, uint64_t col)
+    {
+        return m_Composer(this->m_Data[line][col], line, col);
+    }
+
+    uint64_t Lines() { return m_NumOfLines; }
+    uint64_t Columns() { return m_NumOfCols; }
+private:
+    std::vector<std::vector<std::string>> m_Data;
+    uint64_t m_NumOfLines, m_NumOfCols;
+    composer_fn m_Composer;
+};
+
+class TableList : public cycfi::elements::vlist
+{
+public:
+    using table_composer_ptr = std::shared_ptr<TableCellComposer>;
+
+    cycfi::elements::element_ptr LineMaker(uint64_t line)
+    {
+        if (m_HList[line].get() == nullptr)
+        {
+            auto h_composer =
+                cycfi::elements::basic_hcell_composer(m_TableComposer->Columns(),
+                    [&, line](uint64_t col) 
+                    {
+                        return m_TableComposer->Compose(line, col); 
+                    }
+            );
+
+            m_HList[line] = cycfi::elements::share(cycfi::elements::hlist(h_composer));
+        }
+
+        return m_HList[line];
+    };
+
+    TableList(table_composer_ptr ptr)
+        : cycfi::elements::vdynamic_list(cycfi::elements::basic_vcell_composer(ptr->Lines(), [&](uint64_t line) {return LineMaker(line); })),
+          m_TableComposer(ptr), m_HList(ptr->Lines(), nullptr)
+    {
+
+    }
+protected:
+    table_composer_ptr m_TableComposer;
+    std::vector<cycfi::elements::element_ptr> m_HList;
+};
