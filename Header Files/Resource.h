@@ -24,4 +24,9 @@ public:
 
 		return std::make_shared<View>(main_view, user_permission);
 	}
+
+	const std::unordered_map<std::string, typename Permission<Types...>::Resources>& GetResourceAccesses() const
+	{
+		return m_Permission.GetResourceAccesses();
+	}
 };

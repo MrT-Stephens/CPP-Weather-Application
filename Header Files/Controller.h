@@ -14,7 +14,7 @@
 class Controller : public cycfi::elements::app, private NoCopy
 {
 public:
-	using ResourceAccessor = Resource<DataView>;
+	using ResourceAccessor = Resource<DataView, UserView>;
 private:
 	std::unique_ptr<Modal> m_Modal;
 	std::shared_ptr<cycfi::elements::view> m_MainView;
@@ -30,4 +30,6 @@ public:
 
 	void Init();
 	void UpdateSensorData();
+	void InitDataView();
+	void InitUserView();
 };

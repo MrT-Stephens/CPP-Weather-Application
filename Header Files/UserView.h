@@ -15,6 +15,17 @@ private:
 
 	// Table
 	std::vector<std::vector<std::string>> m_UserData;
+
+	// Add User Data
+	std::string m_Email;
+	std::string m_FirstName;
+	std::string m_LastName;
+	std::string m_Password;
+	std::vector<uint8_t> m_AccessLevels;
+
+	std::function<void()> m_AddUserCallback;
+
+	void AddUserPopup();
 public:
 	UserView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access);
 
