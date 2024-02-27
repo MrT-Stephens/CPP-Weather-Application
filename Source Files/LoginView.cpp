@@ -1,7 +1,7 @@
 #include "../Header Files/LoginView.h"
 
-LoginView::LoginView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access)
-    : View(main_view, user_access)
+LoginView::LoginView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access, std::function<void()> request_exit)
+    : View(main_view, user_access, request_exit)
 {
 
 }

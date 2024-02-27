@@ -38,13 +38,15 @@ public:
 	{
 		std::vector<Subject>::iterator it = GetSubject(email);
 
+		Subject subject(email, first_name, last_name, proofid);
+
 		if (GetSubject(email) == m_Subjects.end())
 		{
-			m_Subjects.emplace_back(email, first_name, last_name, proofid);
+			m_Subjects.push_back(subject);
 		}
 		else
 		{
-			*it = Subject(email, first_name, last_name, proofid);
+			*it = subject;
 		}
 	}
 

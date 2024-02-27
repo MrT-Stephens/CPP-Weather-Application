@@ -12,4 +12,6 @@ public:
 	~ProofID() { m_ProofID = ""; }
 
 	std::string GetProofID() const { return m_ProofID; }
+
+	bool operator==(const ProofID& other) const { return m_ProofID == other.m_ProofID; }
 };

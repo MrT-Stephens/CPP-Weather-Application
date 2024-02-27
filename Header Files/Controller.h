@@ -14,7 +14,8 @@
 class Controller : public cycfi::elements::app, private NoCopy
 {
 public:
-	using ResourceAccessor = Resource<DataView, UserView>;
+	using UsersView = UserView<2U>;
+	using ResourceAccessor = Resource<DataView, UsersView>;
 private:
 	std::unique_ptr<Modal> m_Modal;
 	std::shared_ptr<cycfi::elements::view> m_MainView;
@@ -24,7 +25,7 @@ private:
 	Subject m_CurrentSubject;
 	Authenticator m_Authenticator;
 	
-	std::any m_CurrentView;
+	std::shared_ptr<View> m_CurrentView;
 public:
 	Controller(int argc, char* argv[], std::string name, std::string id);
 
@@ -32,4 +33,7 @@ public:
 	void UpdateSensorData();
 	void InitDataView();
 	void InitUserView();
+	void InitLoginView();
+
+	void OnClose();
 };

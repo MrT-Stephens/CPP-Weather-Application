@@ -16,6 +16,9 @@ private:
 	MenuItem m_UsersMenuItem{ cycfi::elements::menu_item("Users") };
 	MenuItem m_SignOutMenuItem{ cycfi::elements::menu_item("Sign Out") };
 
+	// Header Items
+	cycfi::elements::label m_HeaderUser{ "Hello, User!" };
+
 	// Time and Date Items
 	cycfi::elements::label m_TimeLabel{ "21:00" };
 	cycfi::elements::label m_DateLabel{ "Monday 19 - February 2024" };
@@ -46,7 +49,7 @@ private:
 	cycfi::elements::label m_TemperatureYesterdayLabel{ "26" };
 
 public:
-	DataView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access);
+	DataView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access, std::function<void()> request_exit);
 
 	void InitView() override;
 

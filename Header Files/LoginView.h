@@ -13,7 +13,7 @@ private:
 	std::string m_Email;
 	std::string m_Password;
 public:
-	LoginView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access);
+	LoginView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access, std::function<void()> request_exit);
 	~LoginView();
 
 	void InitView() override;

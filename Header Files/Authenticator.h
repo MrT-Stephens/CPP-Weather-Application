@@ -28,6 +28,8 @@ public:
 			ProofID proof(std::to_string(hash._Do_hash(email + std::to_string(rand() % 1000))));
 
 			Subject temp = m_SubjectInfo.Get(email);
+
+			temp = Subject(email, temp.GetFirstName(), temp.GetLastName(), proof);
 			m_SubjectInfo.Add(email, temp.GetFirstName(), temp.GetLastName(), proof);
 
 			return std::make_pair(true, temp);
@@ -45,6 +47,27 @@ public:
 		info.AddSubject(email, password);
 
 		m_SubjectInfo.Add(email, first_name, last_name, ProofID());
+	}
+
+	std::pair<bool, Subject> ReAuthenticate(const Subject& subject)
+	{
+		Subject temp = m_SubjectInfo.Get(subject.GetEmail());
+
+		if (temp == subject)
+		{
+			std::hash<std::string> hash;
+			ProofID proof(std::to_string(hash._Do_hash(subject.GetEmail() + std::to_string(rand() % 1000))));
+
+			temp = Subject(subject.GetEmail(), subject.GetFirstName(), subject.GetLastName(), proof);
+
+			m_SubjectInfo.Add(subject.GetEmail(), subject.GetFirstName(), subject.GetLastName(), proof);
+
+			return std::make_pair(true, temp);
+		}
+		else
+		{
+			return std::make_pair(false, Subject());
+		}
 	}
 
 	const std::vector<Subject>& GetSubjects() const

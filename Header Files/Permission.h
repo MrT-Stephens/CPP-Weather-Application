@@ -51,25 +51,13 @@ public:
 		return AccessType::NO_ACCESS;
 	}
 
+	void AddPermissions(const std::string& email, const Resources& resources)
+	{
+		m_ResourceAccess.insert(std::make_pair(email, resources));
+	}
+
 	const std::unordered_map<std::string, Resources>& GetResourceAccesses() const
 	{
 		return m_ResourceAccess;
-	}
-
-	static std::string GetAccessString(AccessType access)
-	{
-		switch (access)
-		{
-		case AccessType::NO_ACCESS:
-			return "No Access";
-		case AccessType::READ:
-			return "Read";
-		case AccessType::WRITE:
-			return "Write";
-		case AccessType::READ_WRITE:
-			return "Read/Write";
-		default:
-			return "No Access";
-		}
 	}
 };

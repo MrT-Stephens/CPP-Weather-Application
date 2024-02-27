@@ -1,7 +1,7 @@
 #include "../Header Files/DataView.h"
 
-DataView::DataView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access)
-    : View(main_view, user_access)
+DataView::DataView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access, std::function<void()> request_exit)
+    : View(main_view, user_access, request_exit)
 {
 
 }
@@ -11,6 +11,11 @@ void DataView::InitView()
     auto box = cycfi::elements::margin({ 10, 10, 10, 10 }, cycfi::elements::rbox_element{ cycfi::elements::rbox(m_BackgroundColor.level(1.5f)) });
 
     auto menu_button = cycfi::elements::button_menu("Menu", cycfi::elements::menu_position::bottom_left);
+
+    if (m_UserAccess == (uint8_t)AccessType::READ)
+    {
+        menu_button.enable(false);
+    }
 
     auto menu_item = cycfi::elements::menu_item("About");
 

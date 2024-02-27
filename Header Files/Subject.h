@@ -27,6 +27,12 @@ public:
 	std::string GetFirstName() const { return m_FirstName; }
 	std::string GetLastName() const { return m_LastName; }
 	std::string GetFullName() const { return m_FirstName + " " + m_LastName; }
+	ProofID GetProofID() const { return m_ProofID; }
+
+	bool operator==(const Subject& subject) const
+	{
+		return (m_Email == subject.m_Email && m_FirstName == subject.m_FirstName && m_LastName == subject.m_LastName && m_ProofID == subject.m_ProofID);
+	}
 
 	friend void operator>>(const Subject& subject, std::vector<std::string>& vec)
 	{

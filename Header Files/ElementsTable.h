@@ -1,8 +1,10 @@
 #pragma once
 
+#include "../Header Files/NoCopy.h"
+
 #include <elements.hpp>
 
-class TableCellComposer
+class TableCellComposer : private NoCopy
 {
 public:
     using composer_fn = std::function<cycfi::elements::element_ptr(const std::string& str, size_t line, size_t index)>;
@@ -27,7 +29,7 @@ private:
     composer_fn m_Composer;
 };
 
-class TableList : public cycfi::elements::vlist
+class TableList : public cycfi::elements::vlist, private NoCopy
 {
 public:
     using table_composer_ptr = std::shared_ptr<TableCellComposer>;
