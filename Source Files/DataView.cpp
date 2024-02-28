@@ -249,13 +249,13 @@ void DataView::UpdateView()
     m_MainView->refresh();
 }
 
-void DataView::UpdateTimeAndDate(const std::string& time_hh24_mm, const std::string_view& date_day_dd_mon_yyyy)
+void DataView::UpdateTimeAndDate(const std::string& time_hh24_mm, const std::string& date_day_dd_mon_yyyy)
 {
 	m_TimeLabel.set_text(time_hh24_mm);
 	m_DateLabel.set_text(date_day_dd_mon_yyyy);
 }
 
-void DataView::UpdateWeather(const std::string_view& weather, int32_t current_hour)
+void DataView::UpdateWeather(const std::string& weather, uint32_t current_hour)
 {
     m_WeatherImage.set_image(weather);
 
@@ -284,13 +284,13 @@ void DataView::UpdateWeather(const std::string_view& weather, int32_t current_ho
     }
 }
 
-void DataView::UpdateHumidity(int32_t humidity, int32_t humidity_yesterday)
+void DataView::UpdateHumidity(float humidity, float humidity_yesterday)
 {
     m_HumidityLabel.set_text(std::to_string(humidity) + "%");
 	m_HumidityYesterdayLabel.set_text("Up " + std::to_string(humidity - humidity_yesterday) + "% from yesterday");
 }
 
-void DataView::UpdateWind(int32_t wind_speed, const std::string_view& wind_direction)
+void DataView::UpdateWind(int32_t wind_speed, const std::string& wind_direction)
 {
 	m_WindLabel.set_text(std::to_string(wind_speed));
 	m_WindDirectionLabel.set_text(wind_direction);

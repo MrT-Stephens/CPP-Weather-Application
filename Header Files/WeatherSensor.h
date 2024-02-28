@@ -2,6 +2,8 @@
 
 #include "../Header Files/Sensor.h"
 
+#include <math.h>
+
 enum class WeatherType : uint8_t
 {
 	Sunny,
@@ -9,11 +11,10 @@ enum class WeatherType : uint8_t
 	SunnyCloudy,
 	Rainy,
 	Snowy,
-	Thunderstorm,
-	Count
+	Thunderstorm
 };
 
-class WeatherSensor : public Sensor<WeatherType>
+class WeatherSensor : public Sensor<std::string, uint32_t>
 {
 public:
 	WeatherSensor() : Sensor("Weather") 
@@ -21,8 +22,38 @@ public:
 		std::srand(std::time(nullptr));
 	}
 
-	WeatherType Read() override
+	std::string Read() override
 	{
-		return static_cast<WeatherType>(rand() % static_cast<uint8_t>(WeatherType::Count));
+		std::string img_path;
+
+		m_PreviousValue = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) > 0.75) ? m_PreviousValue + 1 : m_PreviousValue + 0;
+
+		switch ((WeatherType)m_PreviousValue)
+		{
+		case WeatherType::Sunny:
+			img_path = "sun.png";
+			break;
+		case WeatherType::Cloudy:
+			img_path = "cloud.png";
+			break;
+		case WeatherType::SunnyCloudy:
+			img_path = "cloud-sun.png";
+			break;
+		case WeatherType::Rainy:
+			img_path = "rain.png";
+			break;
+		case WeatherType::Snowy:
+			img_path = "snow.png";
+			break;
+		case WeatherType::Thunderstorm:
+			img_path = "thunder.png";
+			break;
+		default:
+			img_path = "sun.png";
+			m_PreviousValue = 0;
+			break;
+		}
+
+		return img_path;
 	}
 };

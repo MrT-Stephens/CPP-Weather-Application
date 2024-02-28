@@ -21,45 +21,6 @@ void Controller::Init()
 	this->run();
 }
 
-void Controller::UpdateSensorData()
-{
-	if (auto view = std::any_cast<std::shared_ptr<DataView>>(m_CurrentView))
-	{
-		std::string img_path = "";
-
-		switch (m_Modal->GetWeatherSensor()->Read())
-		{
-		case WeatherType::Sunny:
-			img_path = "sun.png";
-			break;
-		case WeatherType::Cloudy:
-			img_path = "cloud.png";
-			break;
-		case WeatherType::SunnyCloudy:
-			img_path = "cloud-sun.png";
-			break;
-		case WeatherType::Rainy:
-			img_path = "rain.png";
-			break;
-		case WeatherType::Snowy:
-			img_path = "snow.png";
-			break;
-		case WeatherType::Thunderstorm:
-			img_path = "thunder.png";
-			break;
-		}
-
-
-		view->UpdateWeather(img_path, 23);
-		view->UpdateView();
-
-		m_MainView->post(m_Modal->GetSampleRate(), [this]()
-		{
-			this->UpdateSensorData();
-		});
-	}
-}
-
 void Controller::InitDataView()
 {
 	auto [verified, subject] = m_Authenticator.ReAuthenticate(m_CurrentSubject);
@@ -95,12 +56,17 @@ void Controller::InitDataView()
 			);
 
 			view->UpdateView();
+
+			m_IsDataView = true;
+			UpdateDataView();
 		}
 	}
 }
 
 void Controller::InitUserView()
 {
+	m_IsDataView = false;
+
 	auto [verified, subject] = m_Authenticator.ReAuthenticate(m_CurrentSubject);
 
 	if (verified)
@@ -183,6 +149,7 @@ void Controller::InitUserView()
 
 void Controller::InitLoginView()
 {
+	m_IsDataView = false;
 	m_CurrentView.reset();
 	m_CurrentView = std::make_shared<LoginView>(m_MainView, (uint8_t)AccessType::READ_WRITE, [this]() { OnClose(); });
 
@@ -230,5 +197,42 @@ void Controller::InitLoginView()
 
 void Controller::OnClose()
 {
+	m_IsDataView = false;
 	this->stop();
+}
+
+void Controller::UpdateDataView()
+{
+	auto view = dynamic_cast<DataView*>(m_CurrentView.get());
+
+	if (view != nullptr)
+	{
+		std::tm now = m_Modal->GetTimeSensor()->Read();
+
+		view->UpdateWeather(
+			m_Modal->GetWeatherSensor()->Read(), 
+			(int32_t)now.tm_hour
+		);
+		
+		view->UpdateTimeAndDate(
+			TimeSensor::FormatTime(now, "%H:%M"), 
+			TimeSensor::FormatTime(now, "%A %d - %B %Y")
+		);
+
+		view->UpdateHumidity(
+			m_Modal->GetHumiditySensor()->GetToday(), 
+			m_Modal->GetHumiditySensor()->GetYesterday()
+		);
+
+		view->UpdateView();
+
+		if (m_IsDataView)
+		{
+			// Creates a recursive call to update the data view with new data.
+			m_MainView->post(m_Modal->GetSampleRate(), [this]()
+				{
+					UpdateDataView();
+				});
+		}
+	}
 }

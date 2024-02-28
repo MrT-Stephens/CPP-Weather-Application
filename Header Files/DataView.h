@@ -35,7 +35,7 @@ private:
 	};
 	
 	// Humidity Items
-	cycfi::elements::label m_HumidityLabel{ "70%" };
+	cycfi::elements::label m_HumidityLabel{ "70.00%" };
 	cycfi::elements::label m_HumidityYesterdayLabel{ "Up 18% from yesterday" };
 
 	// Wind Items
@@ -55,13 +55,13 @@ public:
 
 	void UpdateView() override;
 
-	void UpdateTimeAndDate(const std::string& time_hh24_mm, const std::string_view& date_day_dd_mon_yyyy);
+	void UpdateTimeAndDate(const std::string& time_hh24_mm, const std::string& date_day_dd_mon_yyyy);
 
-	void UpdateWeather(const std::string_view& weather, int32_t current_hour);
+	void UpdateWeather(const std::string& weather, uint32_t current_hour);
 
-	void UpdateHumidity(int32_t humidity, int32_t humidity_yesterday);
+	void UpdateHumidity(float humidity, float humidity_yesterday);
 
-	void UpdateWind(int32_t wind_speed, const std::string_view& wind_direction);
+	void UpdateWind(int32_t wind_speed, const std::string& wind_direction);
 
 	void UpdateTemperature(int32_t temperature, int32_t dew_point, int32_t feels_like, int32_t temperature_yesterday);
 

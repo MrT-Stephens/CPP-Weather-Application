@@ -17,23 +17,30 @@ public:
 	using UsersView = UserView<2U>;
 	using ResourceAccessor = Resource<DataView, UsersView>;
 private:
+	// Modal Items
 	std::unique_ptr<Modal> m_Modal;
-	std::shared_ptr<cycfi::elements::view> m_MainView;
-	std::shared_ptr<cycfi::elements::window> m_Window;
-	ResourceAccessor m_ResourceAccessor;
 
+	// Window Items
+	std::shared_ptr<cycfi::elements::window> m_Window;
+
+	// User auth items
 	Subject m_CurrentSubject;
 	Authenticator m_Authenticator;
+	ResourceAccessor m_ResourceAccessor;
 	
+	// View Itmes
 	std::shared_ptr<View> m_CurrentView;
+	std::shared_ptr<cycfi::elements::view> m_MainView;
+	bool m_IsDataView = false;
 public:
 	Controller(int argc, char* argv[], std::string name, std::string id);
 
 	void Init();
-	void UpdateSensorData();
 	void InitDataView();
 	void InitUserView();
 	void InitLoginView();
+
+	void UpdateDataView();
 
 	void OnClose();
 };
