@@ -133,7 +133,7 @@ public:
 
     }
 
-    void InitView() override
+    cycfi::elements::element_ptr InitView() override
     {
         if (m_UserAccess == (uint8_t)AccessType::READ)
         {
@@ -178,20 +178,8 @@ public:
 
         std::shared_ptr<TableList> table_list = std::make_shared<TableList>(table_cell_composer);
 
-        m_MainView->content(
-            cycfi::elements::pane(
-                cycfi::elements::htile(
-                    cycfi::elements::align_left(
-                        cycfi::elements::hmax_size(100,
-                            m_BackButton
-                        )
-                    ),
-                    cycfi::elements::align_right(
-                        cycfi::elements::hmax_size(100,
-                            m_AddUserButton
-                        )
-                    )
-                ),
+        return cycfi::elements::share(
+            cycfi::elements::vtile(
                 cycfi::elements::margin({ 10, 10, 10, 10 },
                     cycfi::elements::htile(
                         cycfi::elements::align_center_top(
@@ -207,16 +195,16 @@ public:
                             )
                         )
                     )
+                ),
+                cycfi::elements::margin({ 10, 10, 10, 10 },
+                    cycfi::elements::align_right(
+                        cycfi::elements::hmax_size(100,
+                            m_AddUserButton
+                        )
+                    )
                 )
-            ),
-            cycfi::elements::box(m_BackgroundColor)
+            )
         );
-    }
-
-    void UpdateView() override
-    {
-        this->InitView();
-        m_MainView->refresh();
     }
 
     void SetUserData(const std::vector<std::vector<std::string>>& data)
@@ -228,9 +216,4 @@ public:
     {
         m_AddUserCallback = callback;
     }
-
-    void SetBackButtonCallback(std::function<void(bool)> callback)
-	{
-        m_BackButton.on_click = callback;
-	}
 };

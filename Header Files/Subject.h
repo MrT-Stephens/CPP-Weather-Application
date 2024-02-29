@@ -29,6 +29,8 @@ public:
 	std::string GetFullName() const { return m_FirstName + " " + m_LastName; }
 	ProofID GetProofID() const { return m_ProofID; }
 
+	bool IsEmpty() const { return (m_Email.empty() && m_FirstName.empty() && m_LastName.empty() && m_ProofID == ProofID()); }
+
 	bool operator==(const Subject& subject) const
 	{
 		return (m_Email == subject.m_Email && m_FirstName == subject.m_FirstName && m_LastName == subject.m_LastName && m_ProofID == subject.m_ProofID);

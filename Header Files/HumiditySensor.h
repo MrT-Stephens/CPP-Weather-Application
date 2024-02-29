@@ -16,7 +16,7 @@ public:
 
 	float Read() override
 	{
-		float random = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
+		float random = (float)rand() / (float)RAND_MAX;
 		m_PreviousValue = m_Add ? m_PreviousValue + random : m_PreviousValue - random;
 
 		if (m_PreviousValue > (float)m_Max)
@@ -40,19 +40,13 @@ public:
 
 	float GetYesterday()
 	{
-		uint32_t random = std::rand() % m_Max;
-
-		if (m_PreviousValue - (float)random < (float)m_Min)
+		if ((float)rand() / (float)RAND_MAX > 0.9)
 		{
-			return m_Min;
-		}
-		else if (m_PreviousValue - (float)random > (float)m_Max)
-		{
-			return m_Max;
+			return m_PreviousValue + (float)rand() / (float)RAND_MAX * 10;
 		}
 		else
 		{
-			return m_PreviousValue - (float)random;
+			return m_PreviousValue - (float)rand() / (float)RAND_MAX * 10;
 		}
 	}
 };

@@ -16,9 +16,7 @@ public:
 	LoginView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access, std::function<void()> request_exit);
 	~LoginView();
 
-	void InitView() override;
-
-	void UpdateView() override;
+	cycfi::elements::element_ptr InitView() override;
 
 	void SetLoginCallback(std::function<void(bool)> callback);
 

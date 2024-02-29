@@ -28,10 +28,11 @@ private:
 	Authenticator m_Authenticator;
 	ResourceAccessor m_ResourceAccessor;
 	
-	// View Itmes
+	// View Items
 	std::shared_ptr<View> m_CurrentView;
 	std::shared_ptr<cycfi::elements::view> m_MainView;
 	bool m_IsDataView = false;
+	cycfi::elements::indirect<cycfi::elements::shared_element<cycfi::elements::element>> m_MainContent{ cycfi::elements::share(cycfi::elements::label("")) };
 public:
 	Controller(int argc, char* argv[], std::string name, std::string id);
 

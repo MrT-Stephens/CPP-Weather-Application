@@ -2,8 +2,8 @@
 
 Controller::Controller(int argc, char* argv[], std::string name, std::string id)
 	: app(argc, argv, name, id), 
-	  m_Modal(std::make_unique<Modal>(5U)),
-	  m_Window(std::make_shared<cycfi::elements::window>(this->name())),
+	  m_Modal(std::make_unique<Modal>(1)),
+	  m_Window(std::make_shared<cycfi::elements::window>(this->name(), cycfi::elements::window::standard, cycfi::elements::rect(50, 50, 1024, 768))),
 	  m_CurrentView(nullptr)
 {
 	m_Window->on_close = [this]()
@@ -16,6 +16,89 @@ Controller::Controller(int argc, char* argv[], std::string name, std::string id)
 
 void Controller::Init()
 {
+	auto menu_button = cycfi::elements::button_menu("Menu", cycfi::elements::menu_position::bottom_left);
+
+	auto about_menu_item = cycfi::elements::menu_item("About");
+	auto data_view_menu_item = cycfi::elements::menu_item("Data View");
+	auto actuators_menu_item = cycfi::elements::menu_item("Actuators") ;
+	auto users_menu_item = cycfi::elements::menu_item("Users");
+	auto sign_out_menu_item = cycfi::elements::menu_item("Sign Out");
+
+	about_menu_item.on_click = [this]()
+		{
+			if (!m_CurrentSubject.IsEmpty())
+			{
+				m_IsDataView = false;
+				return;
+			}
+		};
+
+	data_view_menu_item.on_click = [this]()
+		{
+			if (!m_CurrentSubject.IsEmpty())
+			{
+				m_IsDataView = true;
+				InitDataView();
+			}
+		};
+
+	actuators_menu_item.on_click = [this]()
+		{
+			if (!m_CurrentSubject.IsEmpty())
+			{
+				m_IsDataView = false;
+				return;
+			}
+		};
+
+	users_menu_item.on_click = [this]()
+		{
+			if (!m_CurrentSubject.IsEmpty())
+			{
+				m_IsDataView = false;
+				InitUserView();
+			}
+		};
+
+	sign_out_menu_item.on_click = [this]()
+		{
+			if (!m_CurrentSubject.IsEmpty())
+			{
+				m_IsDataView = false;
+				m_CurrentSubject = Subject();
+				InitLoginView();
+			}
+		};
+
+	auto menu = cycfi::elements::layer(
+		cycfi::elements::vtile(
+			about_menu_item,
+			data_view_menu_item,
+			actuators_menu_item,
+			users_menu_item,
+			sign_out_menu_item
+		), cycfi::elements::panel{}
+	);
+
+	menu_button.menu(menu);
+
+	m_MainView->content(
+		cycfi::elements::pane(
+			cycfi::elements::htile(
+				cycfi::elements::align_middle(
+					cycfi::elements::static_text_box("Hello, User!", cycfi::elements::get_theme().text_box_font.size(20.0f))
+				),
+				cycfi::elements::align_right(
+					cycfi::elements::hmax_size(100,
+						menu_button
+					)
+				)
+			),
+			cycfi::elements::link(m_MainContent)
+		),
+		cycfi::elements::box(cycfi::artist::rgba(35, 35, 37, 255))
+	);
+
 	InitLoginView();
 
 	this->run();
@@ -36,28 +119,9 @@ void Controller::InitDataView()
 
 		if (view != nullptr)
 		{
-			view->SetOnUsersMenuItemClicked([this]()
-				{
-					m_MainView->post(std::chrono::seconds(1), [this]()
-						{
-							InitUserView();
-						});
-				}
-			);
+			m_MainContent = view->InitView();
+			m_MainView->layout(m_MainContent);
 
-			view->SetOnSignOutMenuItemClicked([this]()
-				{
-					m_MainView->post(std::chrono::seconds(1), [this]()
-						{
-							m_CurrentSubject = Subject();
-							InitLoginView();
-						});
-				}
-			);
-
-			view->UpdateView();
-
-			m_IsDataView = true;
 			UpdateDataView();
 		}
 	}
@@ -65,8 +129,6 @@ void Controller::InitDataView()
 
 void Controller::InitUserView()
 {
-	m_IsDataView = false;
-
 	auto [verified, subject] = m_Authenticator.ReAuthenticate(m_CurrentSubject);
 
 	if (verified)
@@ -93,7 +155,7 @@ void Controller::InitUserView()
 				user_data[0].push_back("Resource " + std::to_string(i));
 			}
 
-			for (auto& subject : data)
+			for (const auto& subject : data)
 			{
 				user_data.push_back({ subject.GetEmail(), subject.GetFirstName(), subject.GetLastName() });
 			}
@@ -126,30 +188,18 @@ void Controller::InitUserView()
 					m_Authenticator.Register(email, first_name, last_name, password);
 					m_ResourceAccessor.AddUserPermission(email, access_levels);
 
-					m_MainView->post(std::chrono::seconds(1), [this]()
-						{
-							InitUserView();
-						});
+					InitUserView();
 				}
 			);
 
-			view->SetBackButtonCallback([this](bool)
-				{
-					m_MainView->post(std::chrono::seconds(1), [this]()
-						{
-							InitDataView();
-						});
-				}
-			);
-
-			view->UpdateView();
+			m_MainContent = view->InitView();
+			m_MainView->layout(m_MainContent);
 		}
 	}
 }
 
 void Controller::InitLoginView()
 {
-	m_IsDataView = false;
 	m_CurrentView.reset();
 	m_CurrentView = std::make_shared<LoginView>(m_MainView, (uint8_t)AccessType::READ_WRITE, [this]() { OnClose(); });
 
@@ -167,10 +217,8 @@ void Controller::InitLoginView()
 				{
 					auto&& on_click = [this]()
 						{
-							m_MainView->post(std::chrono::seconds(1), [this]()
-								{
-									InitDataView();
-								});
+							m_IsDataView = true;
+							InitDataView();
 						};
 
 					auto popup = cycfi::elements::message_box1(*m_MainView.get(), "You have successfully logged in", cycfi::elements::icons::info, on_click);
@@ -191,7 +239,9 @@ void Controller::InitLoginView()
 			}
 		);
 
-		view->UpdateView();
+		m_MainContent = view->InitView();
+
+		m_MainView->layout(m_MainContent);
 	}
 }
 
@@ -215,7 +265,7 @@ void Controller::UpdateDataView()
 		);
 		
 		view->UpdateTimeAndDate(
-			TimeSensor::FormatTime(now, "%H:%M"), 
+			TimeSensor::FormatTime(now, "%H:%M:%S"), 
 			TimeSensor::FormatTime(now, "%A %d - %B %Y")
 		);
 
@@ -224,7 +274,9 @@ void Controller::UpdateDataView()
 			m_Modal->GetHumiditySensor()->GetYesterday()
 		);
 
-		view->UpdateView();
+		m_MainContent = view->InitView();
+		m_MainView->layout(m_MainContent);
+		m_MainView->refresh();
 
 		if (m_IsDataView)
 		{

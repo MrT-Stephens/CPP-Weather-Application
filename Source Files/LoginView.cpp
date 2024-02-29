@@ -12,7 +12,7 @@ LoginView::~LoginView()
     m_Password = "";
 }
 
-void LoginView::InitView()
+cycfi::elements::element_ptr LoginView::InitView()
 {
     auto email_entry = cycfi::elements::input_box("", 1.2f);
     auto password_entry = cycfi::elements::input_box("", 1.2f);
@@ -27,7 +27,7 @@ void LoginView::InitView()
 		m_Password = text.data();
 	};
 
-    m_MainView->content(
+    return cycfi::elements::share(
         cycfi::elements::margin({ 20, 20, 20, 20 },
             cycfi::elements::vtile(
                 cycfi::elements::align_center_middle(
@@ -64,15 +64,8 @@ void LoginView::InitView()
                     )
                 )
             )
-        ),
-        cycfi::elements::box(m_BackgroundColor)
+        )
     );
-}
-
-void LoginView::UpdateView()
-{
-    this->InitView();
-    m_MainView->refresh();
 }
 
 void LoginView::SetLoginCallback(std::function<void(bool)> callback)

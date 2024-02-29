@@ -26,7 +26,7 @@ public:
 	{
 		std::string img_path;
 
-		m_PreviousValue = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) > 0.75) ? m_PreviousValue + 1 : m_PreviousValue + 0;
+		m_PreviousValue = ((float)rand() / (float)RAND_MAX > 0.90f) ? m_PreviousValue + 1 : m_PreviousValue + 0;
 
 		switch ((WeatherType)m_PreviousValue)
 		{
