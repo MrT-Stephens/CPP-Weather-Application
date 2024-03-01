@@ -259,9 +259,13 @@ void DataView::UpdateHumidity(float humidity, float humidity_yesterday)
 	m_HumidityYesterdayLabel.set_text(ss.str());
 }
 
-void DataView::UpdateWind(int32_t wind_speed, const std::string& wind_direction)
+void DataView::UpdateWind(float wind_speed, const std::string& wind_direction)
 {
-	m_WindLabel.set_text(std::to_string(wind_speed));
+    std::ostringstream ss;
+
+    ss << std::fixed << std::setprecision(2) << wind_speed;
+	m_WindLabel.set_text(ss.str());
+
 	m_WindDirectionLabel.set_text(wind_direction);
 }
 

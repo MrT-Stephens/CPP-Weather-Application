@@ -18,4 +18,6 @@ public:
 	virtual ReadType Read() = 0;
 
 	std::string GetName() const { return m_Name; }
+
+	ReadType GetPreviousValue() const { return m_PreviousValue; }
 };

@@ -274,6 +274,18 @@ void Controller::UpdateDataView()
 			m_Modal->GetHumiditySensor()->GetYesterday()
 		);
 
+		view->UpdateTemperature(
+			m_Modal->GetTempratureSensor()->Read(),
+			m_Modal->GetDewPoint(),
+			m_Modal->GetFeelsLike(),
+			m_Modal->GetTempratureSensor()->GetPreviousValue()
+		);
+
+		view->UpdateWind(
+			m_Modal->GetWindSensor()->Read(),
+			m_Modal->GetWindSensor()->GetWindDirection()
+		);
+
 		m_MainContent = view->InitView();
 		m_MainView->layout(m_MainContent);
 		m_MainView->refresh();

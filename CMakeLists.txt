@@ -41,6 +41,8 @@ set(ELEMENTS_APP_RESOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/WeatherSensor.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/TimeSensor.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/HumiditySensor.h" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/TempratureSensor.h" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/WindSensor.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Xml.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Source Files/Xml.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Subject.h" 
@@ -55,6 +57,7 @@ set(ELEMENTS_APP_RESOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Resource.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/UserView.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/ElementsTable.h" 
+    
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/cloud.png"
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/sun.png"
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/cloud-sun.png"

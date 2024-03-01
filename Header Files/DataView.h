@@ -50,7 +50,7 @@ public:
 
 	void UpdateHumidity(float humidity, float humidity_yesterday);
 
-	void UpdateWind(int32_t wind_speed, const std::string& wind_direction);
+	void UpdateWind(float wind_speed, const std::string& wind_direction);
 
 	void UpdateTemperature(float temperature, float dew_point, float feels_like, float temperature_yesterday);
 };
