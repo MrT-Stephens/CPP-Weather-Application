@@ -29,7 +29,7 @@ void Controller::Init()
 			if (!m_CurrentSubject.IsEmpty())
 			{
 				m_IsDataView = false;
-				return;
+				InitAboutView();
 			}
 		};
 
@@ -39,15 +39,6 @@ void Controller::Init()
 			{
 				m_IsDataView = true;
 				InitDataView();
-			}
-		};
-
-	actuators_menu_item.on_click = [this]()
-		{
-			if (!m_CurrentSubject.IsEmpty())
-			{
-				m_IsDataView = false;
-				return;
 			}
 		};
 
@@ -74,7 +65,6 @@ void Controller::Init()
 		cycfi::elements::vtile(
 			about_menu_item,
 			data_view_menu_item,
-			actuators_menu_item,
 			users_menu_item,
 			sign_out_menu_item
 		), cycfi::elements::panel{}
@@ -113,7 +103,7 @@ void Controller::InitDataView()
 		m_CurrentSubject = subject;
 
 		m_CurrentView.reset();
-		m_CurrentView = m_ResourceAccessor.AccessResource<DataView>(m_MainView, [this]() { OnClose(); }, m_CurrentSubject, 0);
+		m_CurrentView = m_ResourceAccessor.AccessResource<DataView>(m_MainView, [this]() { OnClose(); }, m_CurrentSubject, 1);
 
 		auto view = dynamic_cast<DataView*>(m_CurrentView.get());
 
@@ -136,7 +126,7 @@ void Controller::InitUserView()
 		m_CurrentSubject = subject;
 
 		m_CurrentView.reset();
-		m_CurrentView = m_ResourceAccessor.AccessResource<UsersView>(m_MainView, [this]() { OnClose(); }, m_CurrentSubject, 1);
+		m_CurrentView = m_ResourceAccessor.AccessResource<UsersView>(m_MainView, [this]() { OnClose(); }, m_CurrentSubject, 2);
 
 		auto view = dynamic_cast<UsersView*>(m_CurrentView.get());
 
@@ -251,6 +241,27 @@ void Controller::OnClose()
 	this->stop();
 }
 
+void Controller::InitAboutView()
+{
+	auto [verified, subject] = m_Authenticator.ReAuthenticate(m_CurrentSubject);
+
+	if (verified)
+	{
+		m_CurrentSubject = subject;
+
+		m_CurrentView.reset();
+		m_CurrentView = m_ResourceAccessor.AccessResource<AboutView>(m_MainView, [this]() { OnClose(); }, m_CurrentSubject, 0);
+
+		auto view = dynamic_cast<AboutView*>(m_CurrentView.get());
+
+		if (view != nullptr)
+		{
+			m_MainContent = view->InitView();
+			m_MainView->layout(m_MainContent);
+		}
+	}
+}
+
 void Controller::UpdateDataView()
 {
 	auto view = dynamic_cast<DataView*>(m_CurrentView.get());
@@ -289,6 +300,34 @@ void Controller::UpdateDataView()
 		m_MainContent = view->InitView();
 		m_MainView->layout(m_MainContent);
 		m_MainView->refresh();
+
+		{
+			auto&& on_click = []()
+				{
+					return;
+				};
+
+			if (m_Modal->GetCooler()->CheckTrigger(m_Modal->GetTempratureSensor()->GetPreviousValue()) == ActuatorState::On)
+			{
+				auto popup = cycfi::elements::message_box1(*m_MainView.get(), "Cooler was turned on!", cycfi::elements::icons::info, on_click);
+
+				cycfi::elements::open_popup(popup, *m_MainView.get());
+			}
+
+			if (m_Modal->GetHeater()->CheckTrigger(m_Modal->GetTempratureSensor()->GetPreviousValue()) == ActuatorState::On)
+			{
+				auto popup = cycfi::elements::message_box1(*m_MainView.get(), "Heater was turned on!", cycfi::elements::icons::info, on_click);
+
+				cycfi::elements::open_popup(popup, *m_MainView.get());
+			}
+
+			if (m_Modal->GetWindTurbine()->CheckTrigger(m_Modal->GetHumiditySensor()->GetPreviousValue()) == ActuatorState::On)
+			{
+				auto popup = cycfi::elements::message_box1(*m_MainView.get(), "Wind turbine breaks have been activated!", cycfi::elements::icons::info, on_click);
+
+				cycfi::elements::open_popup(popup, *m_MainView.get());
+			}
+		}
 
 		if (m_IsDataView)
 		{

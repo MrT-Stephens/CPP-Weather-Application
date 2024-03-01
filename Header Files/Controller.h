@@ -10,12 +10,13 @@
 #include "../Header Files/NoCopy.h"
 #include "../Header Files/Resource.h"
 #include "../Header Files/UserView.h"
+#include "../Header Files/AboutView.h"
 
 class Controller : public cycfi::elements::app, private NoCopy
 {
 public:
-	using UsersView = UserView<2U>;
-	using ResourceAccessor = Resource<DataView, UsersView>;
+	using UsersView = UserView<3U>;
+	using ResourceAccessor = Resource<AboutView, DataView, UsersView>;
 private:
 	// Modal Items
 	std::unique_ptr<Modal> m_Modal;
@@ -40,6 +41,7 @@ public:
 	void InitDataView();
 	void InitUserView();
 	void InitLoginView();
+	void InitAboutView();
 
 	void UpdateDataView();
 

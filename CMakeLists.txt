@@ -5,6 +5,8 @@ set(ELEMENTS_ROOT "${PROJECT_SOURCE_DIR}/lib/elements")
 
 add_link_options(/DYNAMICBASE /NXCOMPAT)
 
+add_compile_options(/Gs /guard:cf /RTC /Wx)
+
 if (NOT ELEMENTS_ROOT)
    message(FATAL_ERROR "ELEMENTS_ROOT is not set")
 endif()
@@ -20,10 +22,10 @@ if (NOT ELEMENTS_BUILD_EXAMPLES)
    add_subdirectory(${ELEMENTS_ROOT} elements)
 endif()
 
-set(ELEMENTS_APP_PROJECT "EmptyStarter")
-set(ELEMENTS_APP_TITLE "Empty Starter")
-set(ELEMENTS_APP_COPYRIGHT "Copyright (c) 2016-2023 Joel de Guzman")
-set(ELEMENTS_APP_ID "com.cycfi.empty-starter")
+set(ELEMENTS_APP_PROJECT "SimulatedWeatherApp")
+set(ELEMENTS_APP_TITLE "Simulated Weather App")
+set(ELEMENTS_APP_COPYRIGHT "Copyright (c) 2023 Thomas Stephens")
+set(ELEMENTS_APP_ID "com.mrt-stephens.SimulatedWeatherApp")
 set(ELEMENTS_APP_VERSION "1.0")
 
 set(ELEMENTS_APP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Main.cpp)
@@ -57,6 +59,8 @@ set(ELEMENTS_APP_RESOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Resource.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/UserView.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/ElementsTable.h" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Actuator.h" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/AboutView.h" 
     
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/cloud.png"
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/sun.png"

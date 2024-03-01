@@ -13,7 +13,6 @@ public:
                             const std::string& password, const std::vector<uint8_t>& access_levels)>;
 private:
 	// Header Buttons
-	Button m_BackButton{ cycfi::elements::button("Back") };
 	Button m_AddUserButton{ cycfi::elements::button("Add User") };
 
 	// Table
@@ -160,7 +159,7 @@ public:
 
                 return cycfi::elements::share(
                     cycfi::elements::hsize(200.0f,
-                        cycfi::elements::limit({ {100, 50}, {200, 100} },
+                        cycfi::elements::limit({ {400, 50}, {400, 50} },
                             cycfi::elements::layer(
                                 cycfi::elements::margin({ 10, 5, 10, 5 },
                                     cycfi::elements::align_left_middle(

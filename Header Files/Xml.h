@@ -5,8 +5,6 @@
 // It can also read and write to streams.
 // It is not a full XML parser and does not support all XML features.
 // It is designed to be simple and easy to use.
-// 
-// Taken from an old project: https://github.com/MrT-Stephens/Csv-to-Desktop-Application.git
 
 #include <deque>
 #include <format>
