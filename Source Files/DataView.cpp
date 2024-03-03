@@ -1,18 +1,30 @@
 #include "../Header Files/DataView.h"
 
+/// <summary>
+/// Initializes a new instance of the <see cref="DataView"/> class.
+/// </summary>
+/// <param name="main_view"> A shared pointer to the view which is being displayed on screen. </param>
+/// <param name="user_access"> The users access for this view. </param>
+/// <param name="request_exit"> Function which gets called if the user access is 'NO ACCESS'. </param>
 DataView::DataView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access, std::function<void()> request_exit)
     : View(main_view, user_access, request_exit)
 {
 
 }
 
+/// <summary>
+/// Initializes the data view with the required UI elements.
+/// </summary>
+/// <returns> A shared pointer to all the UI elements. </returns>
 cycfi::elements::element_ptr DataView::InitView()
 {
+    // A grey rounded box to contain all the elements.
     auto box = cycfi::elements::margin({ 10, 10, 10, 10 }, cycfi::elements::rbox_element{ cycfi::elements::rbox(m_BackgroundColor.level(1.5f)) });
 
     return cycfi::elements::share(
         cycfi::elements::htile(
             cycfi::elements::vtile(
+                // Time and date pane
                 cycfi::elements::vstretch(1.0f,
                     cycfi::elements::margin({ 10, 10, 10, 10 },
                         cycfi::elements::pane("Time",
@@ -32,6 +44,7 @@ cycfi::elements::element_ptr DataView::InitView()
                         )
                     )
                 ),
+                // Weather pane
                 cycfi::elements::vstretch(1.5f,
                     cycfi::elements::margin({ 10, 10, 10, 10 },
                         cycfi::elements::pane("Weather",
@@ -104,6 +117,7 @@ cycfi::elements::element_ptr DataView::InitView()
                 )
             ),
             cycfi::elements::vtile(
+                // Humidity pane
                 cycfi::elements::vstretch(1.0f,
                     cycfi::elements::margin({ 10, 10, 10, 10 },
                         cycfi::elements::pane("Humidity",
@@ -123,6 +137,7 @@ cycfi::elements::element_ptr DataView::InitView()
                         )
                     )
                 ),
+                // Wind pane
                 cycfi::elements::vstretch(1.0f,
                     cycfi::elements::margin({ 10, 10, 10, 10 },
                         cycfi::elements::pane("Wind",
@@ -150,6 +165,7 @@ cycfi::elements::element_ptr DataView::InitView()
                         )
                     )
                 ),
+                // Temperature pane
                 cycfi::elements::vstretch(1.5f,
                     cycfi::elements::margin({ 10, 10, 10, 10 },
                         cycfi::elements::pane("Temperature",
@@ -212,12 +228,22 @@ cycfi::elements::element_ptr DataView::InitView()
     );
 }
 
+/// <summary>
+/// Updates the time and date on the UI.
+/// </summary>
+/// <param name="time_hh24_mm_ss"> Current time in the format 'HH24:mm:ss'. </param>
+/// <param name="date_day_dd_mon_yyyy"> Current date in the format 'Day DD - Mon YYYY'. </param>
 void DataView::UpdateTimeAndDate(const std::string& time_hh24_mm_ss, const std::string& date_day_dd_mon_yyyy)
 {
 	m_TimeLabel.set_text(time_hh24_mm_ss);
 	m_DateLabel.set_text(date_day_dd_mon_yyyy);
 }
 
+/// <summary>
+/// Updates the weather on the UI.
+/// </summary>
+/// <param name="weather"> The current weather. </param>
+/// <param name="current_hour"> The current hour. </param>
 void DataView::UpdateWeather(const std::string& weather, uint32_t current_hour)
 {
     m_WeatherImage.set_image(weather);
@@ -247,6 +273,11 @@ void DataView::UpdateWeather(const std::string& weather, uint32_t current_hour)
     }
 }
 
+/// <summary>
+/// Updates the humidity on the UI.
+/// </summary>
+/// <param name="humidity"> The current humidity. </param>
+/// <param name="humidity_yesterday"> The humidity from yesterday. </param>
 void DataView::UpdateHumidity(float humidity, float humidity_yesterday)
 {
     std::ostringstream ss;
@@ -259,6 +290,11 @@ void DataView::UpdateHumidity(float humidity, float humidity_yesterday)
 	m_HumidityYesterdayLabel.set_text(ss.str());
 }
 
+/// <summary>
+/// Updates the wind on the UI.
+/// </summary>
+/// <param name="wind_speed"> The current wind speed. </param>
+/// <param name="wind_direction"> The current wind direction. </param>
 void DataView::UpdateWind(float wind_speed, const std::string& wind_direction)
 {
     std::ostringstream ss;
@@ -269,6 +305,13 @@ void DataView::UpdateWind(float wind_speed, const std::string& wind_direction)
 	m_WindDirectionLabel.set_text(wind_direction);
 }
 
+/// <summary>
+/// Updates the temperature on the UI.
+/// </summary>
+/// <param name="temperature"> The current temperature. </param>
+/// <param name="dew_point"> The current dew point. </param>
+/// <param name="feels_like"> The current feels like temperature. </param>
+/// <param name="temperature_yesterday"> The temperature from yesterday. </param>
 void DataView::UpdateTemperature(float temperature, float dew_point, float feels_like, float temperature_yesterday)
 {
     std::ostringstream ss;

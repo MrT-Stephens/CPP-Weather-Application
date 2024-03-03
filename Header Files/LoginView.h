@@ -2,6 +2,10 @@
 
 #include "../Header Files/View.h"
 
+/// <summary>
+/// The login view is the first view that the user will see when they open the application. 
+/// It will allow the user to login to the application.
+/// </summary>
 class LoginView : public View
 {
 public:

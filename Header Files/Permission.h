@@ -10,6 +10,13 @@
 #include <any>
 #include <memory>
 
+/// <summary>
+/// Access type for the resources
+/// NO_ACCESS - No access to the resource
+/// READ - Read access to the resource
+/// WRITE - Write access to the resource
+/// READ_WRITE - Read and write access to the resource
+/// </summary>
 enum class AccessType : uint8_t
 {
 	NO_ACCESS = 0x00,
@@ -18,6 +25,10 @@ enum class AccessType : uint8_t
 	READ_WRITE = READ | WRITE
 };
 
+/// <summary>
+/// Permission class to manage the access to the resources (Views).
+/// </summary>
+/// <typeparam name="...T"> Used to pass in all the different views this class will manage. </typeparam>
 template <typename... T>
 class Permission : private NoCopy
 {
@@ -26,6 +37,11 @@ public:
 private:
 	std::unordered_map<std::string, Resources> m_ResourceAccess;
 public:
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Permission"/> class.
+	/// Reads the users resource accesses from the storage.
+	/// If the resource accesses are not found, it creates a new one.
+	/// </summary>
 	Permission()
 	{
 		if (!Storage::Read(std::to_string(typeid(this).hash_code()), m_ResourceAccess))
@@ -34,11 +50,24 @@ public:
 		}
 	}
 
+	/// <summary>
+	/// Finalizes an instance of the <see cref="Permission"/> class.
+	/// Writes the users resource accesses to the storage.
+	/// </summary>
 	~Permission()
 	{
 		Storage::Write(std::to_string(typeid(this).hash_code()), m_ResourceAccess);
 	}
 
+	/// <summary>
+	/// Checks the permission for the given email and resource id.
+	/// If the email is not found, it returns NO_ACCESS.
+	/// If the resource id is not found, it returns NO_ACCESS.
+	/// Otherwise, it returns the access type for the given email and resource id.
+	/// </summary>
+	/// <param name="email"> The users email. </param>
+	/// <param name="resource_id"> The resource id the users is accessing. </param>
+	/// <returns> The access type for the given email and resource id. </returns>
 	AccessType CheckPermission(const std::string& email, uint32_t resource_id)
 	{
 		std::unordered_map<std::string, Resources>::iterator it = m_ResourceAccess.find(email);
@@ -51,6 +80,11 @@ public:
 		return AccessType::NO_ACCESS;
 	}
 
+	/// <summary>
+	/// Adds the permissions for the given email and resources.
+	/// </summary>
+	/// <param name="email"> The users email. </param>
+	/// <param name="resources"> The resources the user has access to. </param>
 	void AddPermissions(const std::string& email, const Resources& resources)
 	{
 		m_ResourceAccess.insert(std::make_pair(email, resources));

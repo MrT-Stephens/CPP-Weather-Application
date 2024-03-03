@@ -2,18 +2,33 @@
 
 #include "../Header Files/Sensor.h"
 
+/// <summary>
+/// WindSensor class is a derived class from Sensor class.
+/// It is used to simulate the wind speed and direction.
+/// </summary>
 class WindSensor : public Sensor<float, float>
 {
 private:
 	bool m_Add = true;
 	int32_t m_Min, m_Max;
 public:
+	/// <summary>
+	/// Initializes a new instance of the <see cref="WindSensor"/> class.
+	/// Names the sensor as "Wind".
+	/// </summary>
+	/// <param name="min"> The minimum simulated wind speed. </param>
+	/// <param name="max"> The maximum simulated wind speed. </param>
 	WindSensor(uint32_t min = 0, uint32_t max = 50)
 		: Sensor("Wind"), m_Min(min), m_Max(max)
 	{
 		std::srand(std::time(nullptr));
 	}
 
+	/// <summary>
+	/// Reads the simulated wind speed.
+	/// The wind speed is a random number between the minimum and maximum values.
+	/// </summary>
+	/// <returns> The simulated wind speed. </returns>
 	float Read() override
 	{
 		float random = (float)rand() / (float)RAND_MAX;
@@ -33,6 +48,11 @@ public:
 		return m_PreviousValue;
 	}
 
+	/// <summary>
+	/// Gets the wind direction.
+	/// The wind direction is a random direction.
+	/// </summary>
+	/// <returns> The simulated wind direction as a string. </returns>
 	std::string GetWindDirection()
 	{
 		switch (rand() % 8)
