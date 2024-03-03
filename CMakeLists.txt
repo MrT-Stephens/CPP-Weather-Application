@@ -5,7 +5,7 @@ set(ELEMENTS_ROOT "${PROJECT_SOURCE_DIR}/lib/elements")
 
 add_link_options(/DYNAMICBASE /NXCOMPAT)
 
-add_compile_options(/Gs /guard:cf /RTC /Wx)
+# add_compile_options(/Gs /guard:cf /RTC /Wx)
 
 if (NOT ELEMENTS_ROOT)
    message(FATAL_ERROR "ELEMENTS_ROOT is not set")
@@ -61,6 +61,11 @@ set(ELEMENTS_APP_RESOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/ElementsTable.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Actuator.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/AboutView.h" 
+
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/easy-encryption/Base64.h" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/easy-encryption/Base64.cpp" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/easy-encryption/vigenere.h" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/easy-encryption/encryption.h" 
     
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/cloud.png"
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources/sun.png"

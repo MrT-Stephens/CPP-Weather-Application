@@ -1,4 +1,5 @@
 #include "../Header Files/Storage.h"
+#include "../lib/easy-encryption/encryption.h"
 
 Storage::Storage()
 	: m_CurrentDirectory(std::filesystem::current_path().string())
@@ -7,7 +8,7 @@ Storage::Storage()
 
 	for (char& c : key)
 	{
-		c = (char)((int)c + (int)'a');
+		c = (char)('a' + (c - '0'));
 	}
 
 	m_Key = key;
@@ -17,12 +18,14 @@ Storage Storage::s_Instance;
 
 std::string Storage::Encrypt(const std::string& data, const std::string& key)
 {
-	return data;
+	std::string data_i{ data }, key_i{ key };
+	return encrypt(data_i, key_i);
 }
 
 std::string Storage::Decrypt(const std::string& data, const std::string& key)
 {
-	return data;
+	std::string data_i{ data }, key_i{ key };
+	return decrypt(data_i, key_i);
 }
 
 bool Storage::WriteInternal(const std::string& name, const std::unordered_map<std::string, std::string>& data)

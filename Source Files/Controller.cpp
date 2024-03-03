@@ -20,7 +20,6 @@ void Controller::Init()
 
 	auto about_menu_item = cycfi::elements::menu_item("About");
 	auto data_view_menu_item = cycfi::elements::menu_item("Data View");
-	auto actuators_menu_item = cycfi::elements::menu_item("Actuators") ;
 	auto users_menu_item = cycfi::elements::menu_item("Users");
 	auto sign_out_menu_item = cycfi::elements::menu_item("Sign Out");
 

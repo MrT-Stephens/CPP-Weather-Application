@@ -152,7 +152,7 @@ public:
 		}
 
         std::shared_ptr<TableCellComposer> table_cell_composer = std::make_shared<TableCellComposer>(m_UserData, m_UserData.size(), m_UserData[0].size(),
-            [&](const std::string& str, uint64_t l, uint64_t c)
+            [](const std::string& str, uint64_t l, uint64_t c)
             {
                 cycfi::elements::color cell_color =
                     ((l % 2 == 0) ? cycfi::elements::colors::blue : cycfi::elements::colors::royal_blue).opacity(c % 2 == 0 ? 0.1 : 0.05);
@@ -164,8 +164,8 @@ public:
                                 cycfi::elements::margin({ 10, 5, 10, 5 },
                                     cycfi::elements::align_left_middle(
                                         (l == 0) ?
-                                        cycfi::elements::label(str).font_size(15.0f).font(cycfi::elements::get_theme().label_font.extra_bold()) :
-                                        cycfi::elements::label(str).font_size(15.0f).font(cycfi::elements::get_theme().label_font)
+                                        cycfi::elements::label(str.c_str()).font_size(15.0f).font(cycfi::elements::get_theme().label_font.extra_bold()) :
+                                        cycfi::elements::label(str.c_str()).font_size(15.0f).font(cycfi::elements::get_theme().label_font)
                                     )
                                 ),
                                 cycfi::elements::box(cell_color)

@@ -507,10 +507,10 @@ void mrt::mrtInternal::XML_Tokenizer_Parser::ReadAttributes(const std::string& l
 
 	while (is >> attrData)
 	{
-		if (attrData.find('=') != std::string::npos)
+		if (attrData.find('\"') != std::string::npos)
 		{
-			name = attrData.substr(0, attrData.find('='));
-			value = attrData.substr(attrData.find('=') + 2, attrData.size() - (attrData.find('=') + 2) - 1);
+			name = attrData.substr(0, attrData.find('\"') - 1);
+			value = attrData.substr(attrData.find('\"') + 1, attrData.size() - (attrData.find('\"') + 1) - 1);
 
 			node->EmplaceAttribute(name, value);
 		}
