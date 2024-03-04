@@ -23,7 +23,7 @@ public:
 	{
 		if (!Storage::Read(std::to_string(typeid(this).hash_code()), m_AuthenticatorInfo))
 		{
-			m_AuthenticatorInfo.insert(std::make_pair("admin@admin.com", "admin"));
+			m_AuthenticatorInfo.insert(std::make_pair("admin123@admin.com", "Admin123!"));
 		}
 	}
 

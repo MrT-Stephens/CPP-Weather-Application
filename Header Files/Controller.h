@@ -11,6 +11,7 @@
 #include "../Header Files/Resource.h"
 #include "../Header Files/UserView.h"
 #include "../Header Files/AboutView.h"
+#include "../Header Files/Utils.h"
 
 class Controller : public cycfi::elements::app, private NoCopy
 {

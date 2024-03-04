@@ -46,7 +46,7 @@ public:
 	{
 		if (!Storage::Read(std::to_string(typeid(this).hash_code()), m_ResourceAccess))
 		{
-			m_ResourceAccess.insert(std::make_pair("admin@admin.com", Resources(sizeof...(T), (uint8_t)AccessType::READ_WRITE)));
+			m_ResourceAccess.insert(std::make_pair("admin123@admin.com", Resources(sizeof...(T), (uint8_t)AccessType::READ_WRITE)));
 		}
 	}
 

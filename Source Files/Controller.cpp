@@ -198,7 +198,40 @@ void Controller::InitLoginView()
 	{
 		view->SetLoginCallback([this, view](bool)
 			{
-				auto [verified, subject] = m_Authenticator.Authenticate(view->GetEmail(), view->GetPassword());
+				std::string email = view->GetEmail(), password = view->GetPassword();
+
+				str_utils::Trim(email);
+				str_utils::Trim(password);
+
+				{
+					if (!std::regex_match(email, str_utils::EmailRegex) || !std::regex_match(email, str_utils::PasswordRegex))
+					{
+						auto&& on_click = []()
+							{
+								return;
+							};
+
+						auto popup = cycfi::elements::message_box1(*m_MainView.get(), 
+							"Invalid login infomation.\n\n"
+							"Email:\n"
+							"1. Must follow standard email format(local - part@domain).\n"
+							"2. No special characters allowed in the domain part.\n"
+							"3. At least one period(.) in the domain part.\n"
+							"4. Domain part must end with a two - letter top - level domain(e.g., .com, .net).\n\n"
+							"Password:\n"
+							"1. Minimum length of 8 characters.\n"
+							"2. Must include at least one letter(uppercase or lowercase) and one digit.\n"
+							"3. Special characters are optional but allowed.\n"
+							"4. No spaces allowed.\n",
+							cycfi::elements::icons::info, on_click);
+
+						cycfi::elements::open_popup(popup, *m_MainView.get());
+
+						return;
+					}
+				}
+
+				auto [verified, subject] = m_Authenticator.Authenticate(email, password);
 
 				m_CurrentSubject = subject;
 
