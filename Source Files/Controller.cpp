@@ -1,5 +1,15 @@
 #include "../Header Files/Controller.h"
 
+/// <summary>
+/// Initializes a new instance of the <see cref="Controller"/> class.
+/// This class is responsible for the main control of the application.
+/// It is responsible for initializing the main view and the main window.
+/// It will also handle the initilization of the different views and the data that is displayed in them.
+/// </summary>
+/// <param name="argc"> The argc. From the main function. </param>
+/// <param name="argv"> The argv. From the main function. </param>
+/// <param name="name"> The name of the application. </param>
+/// <param name="id"> The id of the application. </param>
 Controller::Controller(int argc, char* argv[], std::string name, std::string id)
 	: app(argc, argv, name, id), 
 	  m_Modal(std::make_unique<Modal>(1)),
@@ -14,6 +24,11 @@ Controller::Controller(int argc, char* argv[], std::string name, std::string id)
 	m_MainView = std::make_shared<cycfi::elements::view>(*m_Window.get());
 }
 
+/// <summary>
+/// The main entry point for the application.
+/// Will initialize the main view and the main window.
+/// Then start the login view.
+/// </summary>
 void Controller::Init()
 {
 	auto menu_button = cycfi::elements::button_menu("Menu", cycfi::elements::menu_position::bottom_left);
@@ -93,6 +108,11 @@ void Controller::Init()
 	this->run();
 }
 
+/// <summary>
+/// Initializes the data view.
+/// Will check if the user is still authenticated and if so, will initialize the data view.
+/// If the user is not authenticated, it will return to the login view.
+/// </summary>
 void Controller::InitDataView()
 {
 	auto [verified, subject] = m_Authenticator.ReAuthenticate(m_CurrentSubject);
@@ -116,6 +136,11 @@ void Controller::InitDataView()
 	}
 }
 
+/// <summary>
+/// Initializes the user view.
+/// Will check if the user is still authenticated and if so, will initialize the user view.
+/// If the user is not authenticated, it will do nothing.
+/// </summary>
 void Controller::InitUserView()
 {
 	auto [verified, subject] = m_Authenticator.ReAuthenticate(m_CurrentSubject);
@@ -131,6 +156,7 @@ void Controller::InitUserView()
 
 		if (view != nullptr)
 		{
+			// Get the user data and the permissions for each user.
 			auto data = m_Authenticator.GetSubjects();
 
 			std::vector<std::vector<std::string>> user_data;
@@ -165,8 +191,10 @@ void Controller::InitUserView()
 				}
 			}
 
+			// Set the user data.
 			view->SetUserData(user_data);
 
+			// Set the callback for the add user button.
 			view->SetAddUserCallback([this](
 				const std::string& email,
 				const std::string& first_name,
@@ -187,6 +215,13 @@ void Controller::InitUserView()
 	}
 }
 
+/// <summary>
+/// Initializes the login view.
+/// Will initialize the login view and set the callback for the login button.
+/// If the login button is clicked, it will check if the email and password are valid.
+/// If they are, it will authenticate the user and start the data view.
+/// If they are not, it will display an error message.
+/// </summary>
 void Controller::InitLoginView()
 {
 	m_CurrentView.reset();
@@ -200,10 +235,12 @@ void Controller::InitLoginView()
 			{
 				std::string email = view->GetEmail(), password = view->GetPassword();
 
+				// Trim the email and password. To remove any leading or trailing white spaces.
 				str_utils::Trim(email);
 				str_utils::Trim(password);
 
 				{
+					// Check if the email and password are valid.
 					if (!std::regex_match(email, str_utils::EmailRegex) || !std::regex_match(email, str_utils::PasswordRegex))
 					{
 						auto&& on_click = []()
@@ -231,6 +268,7 @@ void Controller::InitLoginView()
 					}
 				}
 
+				// Authenticate the user.
 				auto [verified, subject] = m_Authenticator.Authenticate(email, password);
 
 				m_CurrentSubject = subject;
@@ -267,12 +305,21 @@ void Controller::InitLoginView()
 	}
 }
 
+/// <summary>
+/// Handles the on close event.
+/// Will stop the application and set the data view to false. To stop the recursive call.
+/// </summary>
 void Controller::OnClose()
 {
 	m_IsDataView = false;
 	this->stop();
 }
 
+/// <summary>
+/// Initializes the about view.
+/// Will check if the user is still authenticated and if so, will initialize the about view.
+/// If the user is not authenticated, it will do nothing.
+/// </summary>
 void Controller::InitAboutView()
 {
 	auto [verified, subject] = m_Authenticator.ReAuthenticate(m_CurrentSubject);
@@ -294,12 +341,20 @@ void Controller::InitAboutView()
 	}
 }
 
+/// <summary>
+/// Updates the data view.
+/// Will update the data view with new data from the sensors.
+/// Will also check if any of the actuators have been triggered and display a message if they have.
+/// If the data view is still active, it will create a recursive call to update the data view with new data.
+/// If the data view is not active, it will stop the recursive call.
+/// </summary>
 void Controller::UpdateDataView()
 {
 	auto view = dynamic_cast<DataView*>(m_CurrentView.get());
 
 	if (view != nullptr)
 	{
+		// Update the data view with new data from the sensors.
 		std::tm now = m_Modal->GetTimeSensor()->Read();
 
 		view->UpdateWeather(
@@ -334,6 +389,7 @@ void Controller::UpdateDataView()
 		m_MainView->refresh();
 
 		{
+			// Check if any of the actuators have been triggered and display a message if they have.
 			auto&& on_click = []()
 				{
 					return;
@@ -361,6 +417,7 @@ void Controller::UpdateDataView()
 			}
 		}
 
+		// If the data view is still active, create a recursive call to update the data view with new data.
 		if (m_IsDataView)
 		{
 			// Creates a recursive call to update the data view with new data.

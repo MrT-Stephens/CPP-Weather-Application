@@ -1,7 +1,6 @@
 #pragma once
 
 #include <elements.hpp>
-#include <any>
 
 #include "../Header Files/DataView.h"
 #include "../Header Files/LoginView.h"
@@ -13,6 +12,10 @@
 #include "../Header Files/AboutView.h"
 #include "../Header Files/Utils.h"
 
+/// <summary>
+/// Controller class is the main class of the application. 
+/// It is responsible for managing the views and the user authentication.
+/// </summary>
 class Controller : public cycfi::elements::app, private NoCopy
 {
 public:
