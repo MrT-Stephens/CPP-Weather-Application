@@ -56,7 +56,9 @@ public:
 
 	float GetFeelsLike() const
 	{
-		return 13.12 + 0.6215 * m_TempratureSensor->GetPreviousValue() - 11.37 * pow(m_WindSensor->GetPreviousValue(), 0.16) + 0.3965 * m_TempratureSensor->GetPreviousValue() * pow(m_WindSensor->GetPreviousValue(), 0.16);
+		return 13.12 + 0.6215 * m_TempratureSensor->GetPreviousValue() - 11.37 * 
+			pow(m_WindSensor->GetPreviousValue(), 0.16) + 0.3965 * m_TempratureSensor->GetPreviousValue() * 
+			pow(m_WindSensor->GetPreviousValue(), 0.16);
 	}
 
 	std::chrono::seconds GetSampleRate() const { return m_SampleRate; }
