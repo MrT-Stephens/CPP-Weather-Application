@@ -61,6 +61,7 @@ set(ELEMENTS_APP_RESOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/ElementsTable.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Actuator.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/AboutView.h" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/Header Files/Utils.h"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/easy-encryption/Base64.h" 
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/easy-encryption/Base64.cpp" 

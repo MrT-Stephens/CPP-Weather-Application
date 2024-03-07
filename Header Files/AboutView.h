@@ -5,12 +5,22 @@
 class AboutView : public View
 {
 public:
+	/// <summary>
+	/// Initializes a new instance of the <see cref="AboutView"/> class.
+	/// </summary>
+	/// <param name="main_view"> A shared pointer to the view which is being displayed on screen. </param>
+	/// <param name="user_access"> The users access for this view. </param>
+	/// <param name="request_exit"> Function which gets called if the user access is 'NO ACCESS'. </param>
 	AboutView(std::shared_ptr<cycfi::elements::view> main_view, uint8_t user_access, std::function<void()> request_exit)
 		: View(main_view, user_access, request_exit)
 	{
 
 	}
 
+	/// <summary>
+	/// Initializes the about view with the appropriate components.
+	/// </summary>
+	/// <returns> Returns a shared pointer to all the UI components. </returns>
 	cycfi::elements::element_ptr AboutView::InitView()
 	{
 		return cycfi::elements::share(

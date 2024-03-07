@@ -4,6 +4,9 @@
 
 #include <math.h>
 
+/// <summary>
+/// Enum class for the different types of weather
+/// </summary>
 enum class WeatherType : uint8_t
 {
 	Sunny,
@@ -14,14 +17,27 @@ enum class WeatherType : uint8_t
 	Thunderstorm
 };
 
+/// <summary>
+/// Weather sensor class that inherits from the sensor class
+/// This class is used to simulate the weather sensor
+/// </summary>
 class WeatherSensor : public Sensor<std::string, uint32_t>
 {
 public:
+	/// <summary>
+	/// Initializes a new instance of the <see cref="WeatherSensor"/> class.
+	/// Names the sensor "Weather".
+	/// </summary>
 	WeatherSensor() : Sensor("Weather") 
 	{ 
 		std::srand(std::time(nullptr));
 	}
 
+	/// <summary>
+	/// Reads the sensor and returns a string representing the weather.
+	/// The string is the path to the image of the weather.
+	/// </summary>
+	/// <returns> String representing the weather images path. </returns>
 	std::string Read() override
 	{
 		std::string img_path;

@@ -4,6 +4,11 @@
 
 #include "../Header Files/View.h"
 
+/// <summary>
+/// The DataView class is a View that displays the current time and date, weather, humidity, wind, and temperature.
+/// It is also responsible for updating the displayed information.
+/// The DataView class is a child of the View class.
+/// </summary>
 class DataView : public View
 {
 private:

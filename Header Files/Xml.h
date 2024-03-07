@@ -21,6 +21,9 @@ namespace mrt
 	/* XML_Attribute Declaration */
 	/*****************************/
 
+	/// <summary>
+	/// XML_Attribute is a simple struct that holds the name and value of an attribute.
+	/// </summary>
 	struct XML_Attribute
 	{
 		XML_Attribute() { }
@@ -34,6 +37,9 @@ namespace mrt
 	/* XML_Node Declaration */
 	/************************/
 
+	/// <summary>
+	/// XML_Node is a simple class that holds the name, value, attributes, and children of a node.
+	/// </summary>
 	class XML_Node
 	{
 	private:
@@ -80,17 +86,33 @@ namespace mrt
 		const std::vector<XML_Node>& GetAllChildren() const;
 	};
 
+	/// <summary>
+	/// Enum class for file errors when reading and writing XML_Document to file.
+	/// SUCCESS: No errors.
+	/// FAILED_TO_OPEN: Failed to open file. Could be due to invalid path or file is in use.
+	/// FILE_EMPTY: File is empty. Could be due to invalid path or file is in use.
+	/// FAILED_TO_READ: Failed to read file. Could be due to invalid XML format.
+	/// FAILED_TO_WRITE: Failed to write to file. Could be due to invalid XML format.
+	/// </summary>
 	enum class XML_Document_FileError : uint8_t
 	{
 		SUCCESS = 0,
 		FAILED_TO_OPEN = 1,
-		FILE_EMPTY = 2
+		FILE_EMPTY = 2,
+		FAILED_TO_READ = 3,
+		FAILED_TO_WRITE = 4
 	};
 
 	/****************************/
 	/* XML_Document Declaration */
 	/****************************/
 
+	/// <summary>
+	/// XML_Document is a simple class that holds the version and root node of an XML document.
+	/// It also has functions to read and write to files and streams.
+	/// It is the main class to use when working with XML files.
+	/// It is not a full XML parser and does not support all XML features.
+	/// </summary>
 	class XML_Document
 	{
 	private:
@@ -142,8 +164,20 @@ namespace mrt
 
 	static std::string getNewLine(bool newLines);
 
+	/// <summary>
+	/// These are internal classes and functions that are used to parse XML files.
+	/// They are not meant to be used by the user. They are used by the XML_Document class.
+	/// </summary>
 	namespace mrtInternal
 	{
+		/// <summary>
+		/// Enum class for XML token types.
+		/// TAG_START: Start of a tag.
+		/// TAG_END: End of a tag.
+		/// TAG_SELF_END: Self ending tag.
+		/// VALUE: Value of a tag.
+		/// END_OF_STRING: End of the string.
+		/// </summary>
 		enum class XML_Token_Type : uint8_t
 		{
 			TAG_START = 0,
@@ -157,6 +191,9 @@ namespace mrt
 		/* XML_Token Declaration */
 		/*************************/
 
+		/// <summary>
+		/// XML_Token is a simple struct that holds the type and data of a token.
+		/// </summary>
 		struct XML_Token
 		{
 			XML_Token_Type m_Type;
@@ -167,6 +204,11 @@ namespace mrt
 		/* XML_Tokenizer Declaration */
 		/*****************************/
 
+		/// <summary>
+		/// XML_Tokenizer is a simple class that tokenizes an XML string.
+		/// It is used by the XML_Tokenizer_Parser class to parse XML strings.
+		/// It is not meant to be used by the user. It is used by the XML_Document class.
+		/// </summary>
 		class XML_Tokenizer
 		{
 		private:
@@ -197,6 +239,11 @@ namespace mrt
 		/* XML_Tokens_Parser Declaration */
 		/*********************************/
 
+		/// <summary>
+		/// XML_Tokenizer_Parser is a simple class that parses XML tokens and creates an XML_Node tree.
+		/// It is used by the XML_Document class to parse XML strings.
+		/// It is not meant to be used by the user. It is used by the XML_Document class.
+		/// </summary>
 		class XML_Tokenizer_Parser
 		{
 		private:
